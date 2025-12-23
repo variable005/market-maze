@@ -308,6 +308,12 @@ body.dark-mode .nav-logo-img { filter: invert(1) brightness(2); }
     /* 2. CONTAINER FIX */
     .container { border-left: none; border-right: none; width: 100%; }
 
+    /* >>> TEXT POSITION FIX <<< */
+    .hero-section {
+        justify-content: flex-start; /* Stop vertical centering */
+        padding-top: 140px;          /* Push text down (Increase if needed) */
+    }
+
     /* 3. BORDER & PADDING RESET */
     .founder-col, .benefit-box, .protocol-card {
         border-right: none !important;
