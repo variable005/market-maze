@@ -278,7 +278,15 @@ export default function App() {
                         <span className="mono" style={{fontWeight:'700'}}>MARKETMAZE LLP</span>
                         <p className="mono" style={{marginTop:'10px', fontSize:'0.7rem', opacity:'0.6'}}>Registered in India.<br/>All Rights Reserved.</p>
                     </div>
-                    <div className="footer-col"><span className="mono">Socials</span><div style={{marginTop:'10px', display:'flex', flexDirection:'column', gap:'5px'}}><a href="#" className="mono footer-link">LinkedIn</a><a href="#" className="mono footer-link">Instagram</a><a href="#" className="mono footer-link">Twitter / X</a></div></div>
+                    <div className="footer-col">
+                        <span className="mono">Socials</span>
+                        <div style={{marginTop:'10px', display:'flex', flexDirection:'column', gap:'5px'}}>
+                            {/* Updated Links */}
+                            <a href="https://www.linkedin.com/company/106402840" target="_blank" rel="noopener noreferrer" className="mono footer-link">LinkedIn</a>
+                            <a href="https://www.instagram.com/marketmazein/" target="_blank" rel="noopener noreferrer" className="mono footer-link">Instagram</a>
+                            <a href="#" className="mono footer-link">Twitter / X</a>
+                        </div>
+                    </div>
                     <div className="footer-col"><span className="mono">Legal</span><div style={{marginTop:'10px', display:'flex', flexDirection:'column', gap:'5px'}}><a href="#" className="mono footer-link">Privacy Policy</a><a href="#" className="mono footer-link">Terms of Service</a></div></div>
                 </footer>
             </div>
