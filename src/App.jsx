@@ -121,7 +121,7 @@ export default function App() {
                             alt="MarketMaze"
                             className="nav-logo-img"
                         />
-                        MARKETMAZE.
+                        MarketMaze
                     </div>
 
                     <div className="nav-right">
@@ -180,7 +180,7 @@ export default function App() {
                     <RevealOnScroll>
                         <div className="pad-x pad-y-sm border-b header-flex">
                             <h2>The Advantage</h2>
-                            <span className="mono">WHY MARKETMAZE</span>
+                            <span className="mono">WHY MarketMaze</span>
                         </div>
                     </RevealOnScroll>
                     <div className="benefits-grid">
