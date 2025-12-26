@@ -356,3 +356,50 @@ body.dark-mode .nav-logo-img { filter: invert(1) brightness(2); }
     .hero-footer { flex-direction: column; align-items: flex-start; gap: 30px; }
     .footer-flex { flex-direction: column; gap: 20px; align-items: center; text-align: center; }
 }
+
+/* =========================================
+   CUSTOM SCROLLBAR (THEME AWARE)
+   ========================================= */
+
+/* 1. Firefox Standard */
+html {
+    scrollbar-width: thin;
+    scrollbar-color: var(--ink) transparent;
+}
+
+/* 2. Webkit Standard (Chrome, Safari, Edge, Brave, Opera) */
+::-webkit-scrollbar {
+    width: 6px; /* Width of vertical scrollbar */
+    height: 6px; /* Height of horizontal scrollbar */
+}
+
+/* The Track (Background) - Kept transparent to show Orbs/Grid */
+::-webkit-scrollbar-track {
+    background: transparent;
+    margin-block: 4px; /* Tiny gap at top/bottom */
+}
+
+/* The Thumb (The moving part) */
+::-webkit-scrollbar-thumb {
+    background-color: var(--ink);
+    border-radius: 50px;
+
+    /* Adds a border matching the page bg creates a "floating" effect */
+    border: 2px solid var(--bg);
+
+    /* Subtle transparency so it doesn't look too heavy */
+    background-clip: padding-box;
+}
+
+/* Hover State - Glows with your Orb color */
+::-webkit-scrollbar-thumb:hover {
+    background-color: var(--orb-1);
+    border-color: var(--bg);
+    cursor: grab;
+}
+
+/* Active State - When clicking/dragging */
+::-webkit-scrollbar-thumb:active {
+    background-color: var(--orb-2);
+    cursor: grabbing;
+}
