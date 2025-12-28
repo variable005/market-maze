@@ -403,3 +403,66 @@ html {
     background-color: var(--orb-2);
     cursor: grabbing;
 }
+
+/* --- CUSTOM MOUSE POINTER --- */
+
+/* Hide default cursor on desktop */
+@media (min-width: 901px) {
+    body {
+        cursor: none;
+    }
+    a, button, input, textarea, .accordion-item {
+        cursor: none !important;
+    }
+}
+
+.cursor-dot {
+    width: 8px;
+    height: 8px;
+    background-color: var(--ink);
+    position: fixed;
+    top: 0;
+    left: 0;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 99999;
+    transition: transform 0.1s ease-out, width 0.3s, height 0.3s, opacity 0.3s;
+    transform: translate(-50%, -50%);
+}
+
+.cursor-outline {
+    width: 40px;
+    height: 40px;
+    border: 1px solid var(--ink);
+    position: fixed;
+    top: 0;
+    left: 0;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 99998;
+    transition: transform 0.2s ease-out, width 0.3s, height 0.3s, opacity 0.3s, background-color 0.3s;
+    transform: translate(-50%, -50%);
+}
+
+/* Hover state for interactive elements */
+.cursor-active .cursor-dot {
+    width: 4px;
+    height: 4px;
+}
+
+.cursor-active .cursor-outline {
+    width: 60px;
+    height: 60px;
+    background-color: var(--ink);
+    opacity: 0.15;
+}
+
+/* Hide custom cursor on mobile */
+@media (max-width: 900px) {
+    .cursor-dot, .cursor-outline {
+        display: none;
+    }
+    body {
+        cursor: auto;
+    }
+}
