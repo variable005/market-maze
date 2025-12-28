@@ -466,3 +466,56 @@ html {
         cursor: auto;
     }
 }
+/* ... (Keep all your existing CSS until the bottom) ... */
+
+/* --- LEGAL PAGE SPECIFIC STYLES --- */
+.legal-container {
+    min-height: 100vh;
+}
+
+.legal-body {
+    max-width: 900px;
+    line-height: 1.8;
+}
+
+.legal-body p {
+    margin-bottom: 20px;
+    opacity: 0.8;
+}
+
+.legal-warning-box {
+    margin-top: 80px;
+    padding: 30px;
+    border: 1px solid var(--ink);
+    background: var(--card-hover);
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.legal-warning-box strong {
+    color: #ff4444;
+}
+
+/* Ensure footer buttons behave like links */
+.footer-link {
+    font-size: 0.8rem;
+    text-decoration: none;
+    color: var(--ink);
+    opacity: 0.6;
+    transition: opacity 0.2s, transform 0.2s;
+}
+
+.footer-link:hover {
+    opacity: 1;
+    transform: translateX(5px);
+}
+
+/* Fix for cursor hiding on dynamic views */
+.cursor-dot, .cursor-outline {
+    z-index: 100000; /* Ensure it stays above everything */
+}
+
+/* Ensure smooth scrolling when navigating home */
+html {
+    scroll-behavior: smooth;
+}
