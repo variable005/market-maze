@@ -8,9 +8,9 @@
     --card-hover: rgba(0,0,0,0.02);
     --faq-bg: #fafafa;
 
-    /* ORB COLORS (Light Mode) - Soft & Dreamy */
-    --orb-1: #a78bfa; /* Soft Purple */
-    --orb-2: #60a5fa; /* Soft Blue */
+    /* ORB COLORS (Light Mode) - Grayscale */
+    --orb-1: #d4d4d4; /* Light Gray */
+    --orb-2: #e5e5e5; /* Lighter Gray */
 
     /* GLASS VARIABLES */
     --glass-bg: rgba(255, 255, 255, 0.65);
@@ -28,9 +28,9 @@ body.dark-mode {
     --card-hover: rgba(255,255,255,0.05);
     --faq-bg: #111111;
 
-    /* ORB COLORS (Dark Mode) - Deep & Glowing */
-    --orb-1: #4c1d95; /* Deep Violet */
-    --orb-2: #1e3a8a; /* Deep Royal Blue */
+    /* ORB COLORS (Dark Mode) - Grayscale Glow */
+    --orb-1: #262626; /* Dark Gray */
+    --orb-2: #404040; /* Medium Gray */
 
     --glass-bg: rgba(10, 10, 10, 0.65);
 }
@@ -466,7 +466,6 @@ html {
         cursor: auto;
     }
 }
-/* ... (Keep all your existing CSS until the bottom) ... */
 
 /* --- LEGAL PAGE SPECIFIC STYLES --- */
 .legal-container {
