@@ -107,7 +107,7 @@ const ServicesDeck = () => {
         <section id="services" className="border-b">
             <RevealOnScroll>
                 <div className="pad-x pad-y-sm border-b header-flex">
-                    <h2>System Capabilities</h2>
+                    <h2>Services</h2>
                     <span className="mono">CORE MODULES</span>
                 </div>
             </RevealOnScroll>
@@ -217,6 +217,14 @@ export default function App() {
         };
     }, []);
 
+    // --- NEW: SCROLL FUNCTION ---
+    const handleScrollDown = () => {
+        const nextSection = document.getElementById('explore-target');
+        if (nextSection) {
+            nextSection.scrollIntoView({ behavior: 'smooth' });
+        }
+    };
+
     return (
         <>
             <div ref={dotRef} className="cursor-dot"></div>
@@ -234,7 +242,7 @@ export default function App() {
                             <a href="#services">Services</a>
                             <a href="#team">Team</a>
                         </div>
-                        <a href="#contact" className="nav-cta mono">Book Call</a>
+                        <a href="#contact" className="nav-cta mono">Contact</a>
                         <button onClick={toggleTheme} className="theme-toggle" aria-label="Toggle Theme">
                             {theme === 'light' ? (
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
@@ -250,17 +258,24 @@ export default function App() {
                         <RevealOnScroll>
                             <div className="hero-meta mono">
                                 <span style={{color: 'var(--ink)', fontWeight: 'bold'}}><LiveClock /></span>
-                                <span>AGENCY PORTAL</span>
+                                <span>AGENCY FIRM</span>
                             </div>
-                            <h1>Build.<br/><span className="outline-text">Scale.</span><br/>Dominate.</h1>
+
+                            <h1 className="hero-title">
+                                navigate the Market<br/>
+                                <span className="outline-text">master the maze</span>
+                            </h1>
+
                             <div className="hero-footer">
                                 <p className="hero-sub">We are the strategic partner for ambitious founders. Turning uncertainty into measurable leverage.</p>
-                                <div className="scroll-indicator">↓</div>
+                                {/* CLICKABLE ARROW */}
+                                <div className="scroll-indicator" onClick={handleScrollDown}>↓</div>
                             </div>
                         </RevealOnScroll>
                     </header>
 
-                    <div className="marquee-container border-b">
+                    {/* ADDED ID FOR SCROLL TARGET */}
+                    <div id="explore-target" className="marquee-container border-b">
                         <div className="marquee-content mono">
                             // STRATEGIC CONSULTING // DIGITAL TRANSFORMATION // BRAND AUTHORITY // MARKET EXPANSION // REVENUE OPTIMIZATION //
                         </div>
@@ -281,7 +296,6 @@ export default function App() {
                         </div>
                     </section>
 
-                    {/* NEW SERVICES DECK IMPLEMENTATION */}
                     <ServicesDeck />
 
                     <section id="team">
@@ -312,11 +326,9 @@ export default function App() {
                                         const phone = e.target.phone.value;
                                         const message = e.target.message.value;
 
-                                        // Construct the mailto link with all fields
                                         const subject = `New Project Inquiry: ${name}`;
                                         const body = `Name: ${name}%0D%0AEmail: ${email}%0D%0APhone: ${phone}%0D%0A%0D%0AProject Details:%0D%0A${message}`;
 
-                                        // Force open email client
                                         window.location.href = `mailto:business@marketmaze.in?subject=${subject}&body=${body}`;
                                     }}
                                 >

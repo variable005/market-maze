@@ -9,8 +9,8 @@
     --faq-bg: #fafafa;
 
     /* ORB COLORS (Light Mode) - Grayscale */
-    --orb-1: #d4d4d4; /* Light Gray */
-    --orb-2: #e5e5e5; /* Lighter Gray */
+    --orb-1: #d4d4d4;
+    --orb-2: #e5e5e5;
 
     /* GLASS VARIABLES */
     --glass-bg: rgba(255, 255, 255, 0.65);
@@ -29,8 +29,8 @@ body.dark-mode {
     --faq-bg: #111111;
 
     /* ORB COLORS (Dark Mode) - Grayscale Glow */
-    --orb-1: #262626; /* Dark Gray */
-    --orb-2: #404040; /* Medium Gray */
+    --orb-1: #262626;
+    --orb-2: #404040;
 
     --glass-bg: rgba(10, 10, 10, 0.65);
 }
@@ -44,21 +44,17 @@ html, body {
 }
 
 /* --- BACKGROUND ANIMATIONS --- */
-
-/* 1. Grid Crawl */
 @keyframes grid-crawl {
     0% { background-position: 0 0; }
     100% { background-position: 50px 50px; }
 }
 
-/* 2. Orb 1 Movement (Top Left -> Bottom Right) */
 @keyframes orb-float-1 {
     0% { transform: translate(0, 0) scale(1); }
     50% { transform: translate(20vw, 20vh) scale(1.1); }
     100% { transform: translate(-10vw, 30vh) scale(0.9); }
 }
 
-/* 3. Orb 2 Movement (Bottom Right -> Top Left) */
 @keyframes orb-float-2 {
     0% { transform: translate(0, 0) scale(1); }
     50% { transform: translate(-30vw, -20vh) scale(1.2); }
@@ -70,28 +66,25 @@ body {
     color: var(--ink);
     font-family: var(--font-display);
     transition: background-color 0.3s ease, color 0.3s ease;
-    position: relative; /* Needed for orbs */
+    position: relative;
     z-index: 1;
-
-    /* GRID PATTERN ON TOP */
     background-image: linear-gradient(var(--grid) 1px, transparent 1px),
     linear-gradient(90deg, var(--grid) 1px, transparent 1px);
     background-size: 50px 50px;
     animation: grid-crawl 60s linear infinite;
 }
 
-/* --- THE MOVING ORBS (Pseudo-elements) --- */
+/* --- THE MOVING ORBS --- */
 body::before, body::after {
     content: '';
     position: fixed;
     border-radius: 50%;
-    filter: blur(100px); /* Makes them soft balls of light */
-    z-index: -1; /* Puts them behind the grid/content */
-    opacity: 0.5; /* Transparency */
+    filter: blur(100px);
+    z-index: -1;
+    opacity: 0.5;
     pointer-events: none;
 }
 
-/* ORB 1 (Top Left Start) */
 body::before {
     background: var(--orb-1);
     width: 60vw;
@@ -101,7 +94,6 @@ body::before {
     animation: orb-float-1 25s ease-in-out infinite alternate;
 }
 
-/* ORB 2 (Bottom Right Start) */
 body::after {
     background: var(--orb-2);
     width: 50vw;
@@ -137,7 +129,22 @@ body::after {
 .reveal.visible { opacity: 1; transform: translateY(0); filter: blur(0); }
 
 /* --- TYPOGRAPHY --- */
-h1 { font-size: clamp(2.5rem, 6vw, 6rem); line-height: 0.9; letter-spacing: -0.03em; font-weight: 800; text-transform: uppercase; }
+
+/* REVERTED: Standard Size & Centered */
+.hero-title {
+    /* Clamped size: Min 1.8rem, Max 4.5rem. */
+    font-size: clamp(1.8rem, 4.5vw, 4.5rem);
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    font-weight: 800;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+
+    /* CENTERING FOR DESKTOP */
+    text-align: center;
+    width: 100%;
+}
+
 h2 { font-size: clamp(1.8rem, 4vw, 3rem); text-transform: uppercase; letter-spacing: -0.02em; }
 h3 { font-size: 1.5rem; margin-bottom: 15px; }
 
@@ -151,9 +158,7 @@ h3 { font-size: 1.5rem; margin-bottom: 15px; }
 .container {
     max-width: 1400px; margin: 0 auto;
     border-left: 1px solid var(--ink); border-right: 1px solid var(--ink);
-    /* Make background transparent so orbs shine through */
     background: transparent;
-
     position: relative; z-index: 1;
     transition: border-color 0.3s ease;
 }
@@ -180,7 +185,6 @@ h3 { font-size: 1.5rem; margin-bottom: 15px; }
     transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
-/* Logo Styles */
 .logo { font-weight: 800; font-size: 1.2rem; letter-spacing: -1px; display: flex; align-items: center; }
 .nav-logo-img { height: 30px; width: auto; margin-right: 10px; display: block; transition: filter 0.3s ease; }
 body.dark-mode .nav-logo-img { filter: invert(1) brightness(2); }
@@ -215,13 +219,49 @@ body.dark-mode .nav-logo-img { filter: invert(1) brightness(2); }
 .theme-toggle:hover { background: var(--ink); color: var(--bg); transform: rotate(15deg); }
 
 /* --- HERO --- */
-.hero-section { min-height: 80vh; display: flex; flex-direction: column; justify-content: center; position: relative; }
+.hero-section {
+    min-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center; /* CENTER ALIGN ITEMS ON DESKTOP */
+    position: relative;
+}
 .hero-meta { margin-bottom: 20px; display: flex; gap: 20px; opacity: 0.6; flex-wrap: wrap; }
-.hero-footer { display: flex; justify-content: space-between; align-items: flex-end; margin-top: 60px; }
-.hero-sub { max-width: 400px; font-size: 1.1rem; line-height: 1.5; }
+
+/* UPDATED HERO FOOTER (CENTERED STACK) */
+.hero-footer {
+    display: flex;
+    flex-direction: column; /* Stack vertically */
+    align-items: center;    /* Center horizontally */
+    justify-content: center;
+    margin-top: 50px;
+    width: 100%;
+    gap: 40px; /* Space between paragraph and arrow */
+    text-align: center;
+}
+
+/* UPDATED HERO SUBTEXT (CENTERED) */
+.hero-sub {
+    max-width: 500px;
+    font-size: 1.1rem;
+    line-height: 1.5;
+    text-align: center; /* Force Center */
+    margin: 0 auto;
+}
+
+/* --- UPDATED ARROW STYLES WITH HOVER --- */
 .scroll-indicator {
     width: 50px; height: 50px; border: 1px solid var(--ink); border-radius: 50%;
-    display: grid; place-items: center; animation: bounce 2s infinite; transition: border-color 0.3s ease;
+    display: grid; place-items: center; animation: bounce 2s infinite;
+    transition: all 0.3s ease; cursor: pointer;
+}
+
+.scroll-indicator:hover {
+    background-color: var(--ink);
+    color: var(--bg);
+    animation-play-state: paused;
+    transform: scale(1.1);
 }
 
 /* --- MARQUEE --- */
@@ -234,157 +274,62 @@ body.dark-mode .nav-logo-img { filter: invert(1) brightness(2); }
 .benefit-box:nth-child(even) { border-right: none; }
 .benefit-text { line-height: 1.6; opacity: 0.8; max-width: 90%; }
 
-/* --- NEW SERVICES DECK STYLES --- */
+/* --- SERVICES DECK --- */
 .deck-container {
     display: grid;
     grid-template-columns: 40% 60%;
     min-height: 600px;
-    background: rgba(255, 255, 255, 0.02); /* Slight tint */
+    background: rgba(255, 255, 255, 0.02);
 }
 
-/* LEFT SIDE: MENU */
-.deck-menu {
-    display: flex;
-    flex-direction: column;
-}
-
+.deck-menu { display: flex; flex-direction: column; }
 .deck-item {
-    flex: 1; /* Stretch to fill height evenly */
-    display: flex;
-    align-items: center;
-    padding: 0 4vw;
-    border-bottom: 1px solid var(--ink);
-    cursor: pointer;
+    flex: 1; display: flex; align-items: center; padding: 0 4vw;
+    border-bottom: 1px solid var(--ink); cursor: pointer;
     transition: background 0.3s ease, padding-left 0.3s ease;
-    position: relative;
-    overflow: hidden;
+    position: relative; overflow: hidden;
 }
-
-.deck-item:last-child {
-    border-bottom: none;
-}
-
-.deck-item:hover, .deck-item.active {
-    background: var(--ink);
-    color: var(--bg);
-    padding-left: 5vw; /* Slide effect */
-}
-
-.deck-num {
-    margin-right: 20px;
-    opacity: 0.5;
-    transition: opacity 0.3s;
-}
-
-.deck-title {
-    font-family: var(--font-display);
-    font-weight: 700;
-    font-size: 1.2rem;
-    text-transform: uppercase;
-    letter-spacing: -0.02em;
-}
-
-/* The arrow that appears on hover */
+.deck-item:last-child { border-bottom: none; }
+.deck-item:hover, .deck-item.active { background: var(--ink); color: var(--bg); padding-left: 5vw; }
+.deck-num { margin-right: 20px; opacity: 0.5; transition: opacity 0.3s; }
+.deck-title { font-family: var(--font-display); font-weight: 700; font-size: 1.2rem; text-transform: uppercase; letter-spacing: -0.02em; }
 .deck-indicator {
-    position: absolute;
-    right: 4vw;
-    opacity: 0;
-    transform: translateX(-20px);
-    transition: all 0.3s ease;
-    font-family: var(--font-tech);
+    position: absolute; right: 4vw; opacity: 0; transform: translateX(-20px);
+    transition: all 0.3s ease; font-family: var(--font-tech);
 }
+.deck-item:hover .deck-indicator, .deck-item.active .deck-indicator { opacity: 1; transform: translateX(0); }
 
-.deck-item:hover .deck-indicator,
-.deck-item.active .deck-indicator {
-    opacity: 1;
-    transform: translateX(0);
-}
-
-/* RIGHT SIDE: DISPLAY */
 .deck-display {
-    position: relative;
-    padding: 60px 4vw;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    overflow: hidden;
+    position: relative; padding: 60px 4vw; display: flex;
+    flex-direction: column; justify-content: center; overflow: hidden;
 }
 
-/* Animation for switching content */
 @keyframes glitch-in {
     0% { opacity: 0; transform: translateX(20px); filter: blur(5px); }
     100% { opacity: 1; transform: translateX(0); filter: blur(0); }
 }
 
-.display-content {
-    position: relative;
-    z-index: 2;
-    animation: glitch-in 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
-}
-
+.display-content { position: relative; z-index: 2; animation: glitch-in 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); }
 .display-header {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 30px;
-    font-size: 0.75rem;
-    opacity: 0.6;
-    border-bottom: 1px solid var(--ink);
-    padding-bottom: 10px;
-    width: 100%;
+    display: flex; justify-content: space-between; margin-bottom: 30px;
+    font-size: 0.75rem; opacity: 0.6; border-bottom: 1px solid var(--ink);
+    padding-bottom: 10px; width: 100%;
 }
-
-.status-blink {
-    color: #00ff00; /* Hacker green */
-    animation: pulse-green 2s infinite;
-}
-
-.display-big-title {
-    font-size: clamp(3rem, 5vw, 5rem);
-    line-height: 0.9;
-    margin-bottom: 30px;
-    text-transform: uppercase;
-}
-
-.display-desc {
-    font-size: 1.2rem;
-    line-height: 1.5;
-    max-width: 500px;
-    margin-bottom: 40px;
-    opacity: 0.8;
-}
-
-.display-tags {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-}
-
+.status-blink { color: #00ff00; animation: pulse-green 2s infinite; }
+.display-big-title { font-size: clamp(3rem, 5vw, 5rem); line-height: 0.9; margin-bottom: 30px; text-transform: uppercase; }
+.display-desc { font-size: 1.2rem; line-height: 1.5; max-width: 500px; margin-bottom: 40px; opacity: 0.8; }
+.display-tags { display: flex; gap: 10px; flex-wrap: wrap; }
 .tag-container { margin-top: 20px; display: flex; gap: 10px; flex-wrap: wrap; }
 .tag { border: 1px solid currentColor; padding: 5px 10px; font-size: 0.7rem; }
-
-/* Giant background number */
 .bg-huge-num {
-    position: absolute;
-    bottom: -50px;
-    right: -20px;
-    font-size: 20rem;
-    font-family: var(--font-display);
-    font-weight: 800;
-    color: var(--ink);
-    opacity: 0.03; /* Very subtle watermark */
-    z-index: 0;
-    pointer-events: none;
-    line-height: 1;
+    position: absolute; bottom: -50px; right: -20px; font-size: 20rem;
+    font-family: var(--font-display); font-weight: 800; color: var(--ink);
+    opacity: 0.03; z-index: 0; pointer-events: none; line-height: 1;
 }
 
-/* DARK MODE ADJUSTMENT for the Active State */
-body.dark-mode .deck-item:hover,
-body.dark-mode .deck-item.active {
-    background: var(--ink); /* White background */
-    color: var(--bg); /* Black text */
-}
+body.dark-mode .deck-item:hover, body.dark-mode .deck-item.active { background: var(--ink); color: var(--bg); }
 
-/* --- LEADERSHIP (4 Cols) --- */
+/* --- LEADERSHIP --- */
 .founders-grid { display: grid; grid-template-columns: repeat(4, 1fr); border-bottom: 1px solid var(--ink); }
 .founder-col { padding: 60px 4vw; border-right: 1px solid var(--ink); display: flex; flex-direction: column; transition: border-color 0.3s; }
 .founder-col:last-child { border-right: none; }
@@ -394,11 +339,8 @@ body.dark-mode .deck-item.active {
     background: var(--ink); color: var(--bg); width: fit-content;
     transition: background 0.3s, color 0.3s;
 }
-.founder-bio { line-height: 1.6; opacity: 0.8; margin-top: 10px; }
 
-/* --- FAQ & CONTACT --- */
-.faq-section { background: var(--faq-bg); transition: background 0.3s; }
-.faq-container { border-top: 1px solid var(--ink); transition: border-color 0.3s; }
+/* --- CONTACT --- */
 .contact-layout { display: grid; grid-template-columns: 1fr 2fr; gap: 60px; }
 .contact-details { margin-top: 30px; }
 .contact-form { display: flex; flex-direction: column; gap: 40px; }
@@ -418,67 +360,63 @@ body.dark-mode .deck-item.active {
     transition: transform 0.2s, background 0.3s, color 0.3s;
 }
 .submit-btn:hover { transform: translateX(10px); }
-
 .footer-flex { display: flex; justify-content: space-between; padding-bottom: 60px; padding-top: 60px; }
-.footer-link { text-decoration: none; color: var(--ink); opacity: 0.6; transition: opacity 0.2s; }
-.footer-link:hover { opacity: 1; }
+.footer-link { text-decoration: none; color: var(--ink); opacity: 0.6; transition: opacity 0.2s, transform 0.2s; font-size: 0.8rem; }
+.footer-link:hover { opacity: 1; transform: translateX(5px); }
 
 /* =========================================================
    MOBILE FIXES (Breakpoints & Logic)
    ========================================================= */
 
-/* VISIBILITY UTILITIES */
 .desktop-only { display: grid; }
 .mobile-only { display: none; }
 
 @media (max-width: 900px) {
-    /* TOGGLE SERVICES VIEW */
     .desktop-only { display: none; }
     .mobile-only { display: block; }
 
-    /* 1. LAYOUT RESET */
-    .founders-grid, .benefits-grid, .protocol-grid, .contact-layout {
-        grid-template-columns: 1fr !important;
-    }
-
-    /* 2. CONTAINER FIX */
+    .founders-grid, .benefits-grid, .contact-layout { grid-template-columns: 1fr !important; }
     .container { border-left: none; border-right: none; width: 100%; }
 
-    /* >>> TEXT POSITION FIX <<< */
-    .hero-section {
-        justify-content: flex-start; /* Stop vertical centering */
-        padding-top: 140px;          /* Push text down (Increase if needed) */
+    /* TEXT ADJUSTMENTS */
+    /* On mobile, we revert to left align as it usually fits better with vertical stacking */
+    .hero-section { justify-content: flex-start; align-items: flex-start; padding-top: 140px; }
+
+    .hero-title {
+        font-size: clamp(1.8rem, 7vw, 2.5rem);
+        word-break: normal;
+        overflow-wrap: break-word;
+        text-align: left; /* Keep left on mobile for cleaner edge */
     }
 
-    /* 3. BORDER & PADDING RESET */
-    .founder-col, .benefit-box, .protocol-card, .mobile-service-card {
+    /* Reset Footer for Mobile to align left if preferred */
+    .hero-footer {
+        align-items: flex-start;
+        text-align: left;
+        margin-top: 30px;
+        gap: 30px;
+    }
+    .hero-sub {
+        text-align: left;
+        margin: 0;
+    }
+
+    .founder-col, .benefit-box, .mobile-service-card {
         border-right: none !important;
         border-bottom: 1px solid var(--ink);
         padding: 40px 24px;
-        /* Subtle glass effect on cards so they sit nicely on top of orbs */
         background: rgba(255, 255, 255, 0.05);
         backdrop-filter: blur(5px);
     }
-    .founder-col:last-child, .benefit-box:last-child, .protocol-card:last-child {
-        border-bottom: none;
-    }
+    .founder-col:last-child { border-bottom: none; }
 
-    /* 4. NAV BAR FIX */
     .nav-bar {
-        position: fixed;
-        top: 15px; left: 50%; transform: translateX(-50%);
-        width: calc(100% - 32px);
-        padding: 10px 16px;
-        justify-content: space-between;
+        position: fixed; top: 15px; left: 50%; transform: translateX(-50%);
+        width: calc(100% - 32px); padding: 10px 16px; justify-content: space-between;
     }
-
-    /* LOGO FIX */
     .nav-logo-img { height: 20px; width: auto; }
+    .nav-links, .nav-cta:not(.mobile-dock) { display: none; }
 
-    .nav-links { display: none; }
-    .nav-cta:not(.mobile-dock) { display: none; }
-
-    /* 5. MOBILE DOCK CTA */
     .nav-cta.mobile-dock {
         display: flex; position: fixed; bottom: 20px; left: 16px; right: 16px;
         width: auto; justify-content: center; background: var(--ink); color: var(--bg);
@@ -486,138 +424,45 @@ body.dark-mode .deck-item.active {
     }
     .nav-cta.mobile-dock::before { display: none; }
 
-    /* 6. GENERAL TEXT */
-    h1 { font-size: 3rem; word-break: break-word; }
     .big-input { font-size: 1.5rem; }
     .hero-footer { flex-direction: column; align-items: flex-start; gap: 30px; }
     .footer-flex { flex-direction: column; gap: 20px; align-items: center; text-align: center; }
 }
 
-/* =========================================
-   CUSTOM SCROLLBAR (THEME AWARE)
-   ========================================= */
+/* SCROLLBAR */
+html { scrollbar-width: thin; scrollbar-color: var(--ink) transparent; }
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; margin-block: 4px; }
+::-webkit-scrollbar-thumb { background-color: var(--ink); border-radius: 50px; border: 2px solid var(--bg); background-clip: padding-box; }
+::-webkit-scrollbar-thumb:hover { background-color: var(--orb-1); border-color: var(--bg); cursor: grab; }
+::-webkit-scrollbar-thumb:active { background-color: var(--orb-2); cursor: grabbing; }
 
-/* 1. Firefox Standard */
-html {
-    scrollbar-width: thin;
-    scrollbar-color: var(--ink) transparent;
-}
-
-/* 2. Webkit Standard (Chrome, Safari, Edge, Brave, Opera) */
-::-webkit-scrollbar {
-    width: 6px; /* Width of vertical scrollbar */
-    height: 6px; /* Height of horizontal scrollbar */
-}
-
-/* The Track (Background) - Kept transparent to show Orbs/Grid */
-::-webkit-scrollbar-track {
-    background: transparent;
-    margin-block: 4px; /* Tiny gap at top/bottom */
-}
-
-/* The Thumb (The moving part) */
-::-webkit-scrollbar-thumb {
-    background-color: var(--ink);
-    border-radius: 50px;
-
-    /* Adds a border matching the page bg creates a "floating" effect */
-    border: 2px solid var(--bg);
-
-    /* Subtle transparency so it doesn't look too heavy */
-    background-clip: padding-box;
-}
-
-/* Hover State - Glows with your Orb color */
-::-webkit-scrollbar-thumb:hover {
-    background-color: var(--orb-1);
-    border-color: var(--bg);
-    cursor: grab;
-}
-
-/* Active State - When clicking/dragging */
-::-webkit-scrollbar-thumb:active {
-    background-color: var(--orb-2);
-    cursor: grabbing;
-}
-
-/* --- CUSTOM MOUSE POINTER --- */
-
-/* Hide default cursor on desktop */
+/* CURSOR */
 @media (min-width: 901px) {
-    body {
-        cursor: none;
-    }
-    a, button, input, textarea {
-        cursor: none !important;
-    }
+    body { cursor: none; }
+    a, button, input, textarea { cursor: none !important; }
 }
 
 .cursor-dot {
-    width: 8px;
-    height: 8px;
-    background-color: var(--ink);
-    position: fixed;
-    top: 0;
-    left: 0;
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 99999;
+    width: 8px; height: 8px; background-color: var(--ink);
+    position: fixed; top: 0; left: 0; border-radius: 50%;
+    pointer-events: none; z-index: 100000;
     transition: transform 0.1s ease-out, width 0.3s, height 0.3s, opacity 0.3s;
     transform: translate(-50%, -50%);
 }
 
 .cursor-outline {
-    width: 40px;
-    height: 40px;
-    border: 1px solid var(--ink);
-    position: fixed;
-    top: 0;
-    left: 0;
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 99998;
+    width: 40px; height: 40px; border: 1px solid var(--ink);
+    position: fixed; top: 0; left: 0; border-radius: 50%;
+    pointer-events: none; z-index: 99998;
     transition: transform 0.2s ease-out, width 0.3s, height 0.3s, opacity 0.3s, background-color 0.3s;
     transform: translate(-50%, -50%);
 }
 
-/* Hover state for interactive elements */
-.cursor-active .cursor-dot {
-    width: 4px;
-    height: 4px;
-}
+.cursor-active .cursor-dot { width: 4px; height: 4px; }
+.cursor-active .cursor-outline { width: 60px; height: 60px; background-color: var(--ink); opacity: 0.15; }
 
-.cursor-active .cursor-outline {
-    width: 60px;
-    height: 60px;
-    background-color: var(--ink);
-    opacity: 0.15;
-}
-
-/* Hide custom cursor on mobile */
 @media (max-width: 900px) {
-    .cursor-dot, .cursor-outline {
-        display: none;
-    }
-    body {
-        cursor: auto;
-    }
-}
-
-/* Ensure footer buttons behave like links */
-.footer-link {
-    font-size: 0.8rem;
-    text-decoration: none;
-    color: var(--ink);
-    opacity: 0.6;
-    transition: opacity 0.2s, transform 0.2s;
-}
-
-.footer-link:hover {
-    opacity: 1;
-    transform: translateX(5px);
-}
-
-/* Fix for cursor hiding on dynamic views */
-.cursor-dot, .cursor-outline {
-    z-index: 100000; /* Ensure it stays above everything */
+    .cursor-dot, .cursor-outline { display: none; }
+    body { cursor: auto; }
 }
