@@ -40,6 +40,7 @@ body.dark-mode {
 html, body {
     width: 100%;
     overflow-x: hidden;
+    scroll-behavior: smooth;
 }
 
 /* --- BACKGROUND ANIMATIONS --- */
@@ -152,8 +153,6 @@ h3 { font-size: 1.5rem; margin-bottom: 15px; }
     border-left: 1px solid var(--ink); border-right: 1px solid var(--ink);
     /* Make background transparent so orbs shine through */
     background: transparent;
-    /* Or semi-transparent solid if text is hard to read: */
-    /* background: rgba(var(--bg), 0.5); */
 
     position: relative; z-index: 1;
     transition: border-color 0.3s ease;
@@ -235,26 +234,155 @@ body.dark-mode .nav-logo-img { filter: invert(1) brightness(2); }
 .benefit-box:nth-child(even) { border-right: none; }
 .benefit-text { line-height: 1.6; opacity: 0.8; max-width: 90%; }
 
-/* --- ACCORDION --- */
-.accordion-item { border-bottom: 1px solid var(--ink); cursor: pointer; transition: background 0.3s, border-color 0.3s; }
-.accordion-item:hover { background: var(--card-hover); }
-.accordion-header { display: flex; justify-content: space-between; align-items: center; padding: 30px 4vw; }
-.accordion-title { font-size: 2rem; font-weight: 700; text-transform: uppercase; display: flex; gap: 20px; }
-.accordion-num { font-family: var(--font-tech); font-size: 1rem; opacity: 0.5; margin-top: 6px; }
-.accordion-arrow { transform: rotate(0deg); transition: transform 0.3s; }
-.accordion-item.active .accordion-arrow { transform: rotate(180deg); }
-.accordion-body { max-height: 0; overflow: hidden; transition: max-height 0.5s cubic-bezier(0,1,0,1); padding: 0 4vw; }
-.accordion-item.active .accordion-body { max-height: 300px; padding-bottom: 40px; transition: max-height 0.5s ease-in-out; }
-.accordion-desc { max-width: 600px; line-height: 1.6; font-size: 1.1rem; }
+/* --- NEW SERVICES DECK STYLES --- */
+.deck-container {
+    display: grid;
+    grid-template-columns: 40% 60%;
+    min-height: 600px;
+    background: rgba(255, 255, 255, 0.02); /* Slight tint */
+}
+
+/* LEFT SIDE: MENU */
+.deck-menu {
+    display: flex;
+    flex-direction: column;
+}
+
+.deck-item {
+    flex: 1; /* Stretch to fill height evenly */
+    display: flex;
+    align-items: center;
+    padding: 0 4vw;
+    border-bottom: 1px solid var(--ink);
+    cursor: pointer;
+    transition: background 0.3s ease, padding-left 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.deck-item:last-child {
+    border-bottom: none;
+}
+
+.deck-item:hover, .deck-item.active {
+    background: var(--ink);
+    color: var(--bg);
+    padding-left: 5vw; /* Slide effect */
+}
+
+.deck-num {
+    margin-right: 20px;
+    opacity: 0.5;
+    transition: opacity 0.3s;
+}
+
+.deck-title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+}
+
+/* The arrow that appears on hover */
+.deck-indicator {
+    position: absolute;
+    right: 4vw;
+    opacity: 0;
+    transform: translateX(-20px);
+    transition: all 0.3s ease;
+    font-family: var(--font-tech);
+}
+
+.deck-item:hover .deck-indicator,
+.deck-item.active .deck-indicator {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* RIGHT SIDE: DISPLAY */
+.deck-display {
+    position: relative;
+    padding: 60px 4vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow: hidden;
+}
+
+/* Animation for switching content */
+@keyframes glitch-in {
+    0% { opacity: 0; transform: translateX(20px); filter: blur(5px); }
+    100% { opacity: 1; transform: translateX(0); filter: blur(0); }
+}
+
+.display-content {
+    position: relative;
+    z-index: 2;
+    animation: glitch-in 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.display-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+    font-size: 0.75rem;
+    opacity: 0.6;
+    border-bottom: 1px solid var(--ink);
+    padding-bottom: 10px;
+    width: 100%;
+}
+
+.status-blink {
+    color: #00ff00; /* Hacker green */
+    animation: pulse-green 2s infinite;
+}
+
+.display-big-title {
+    font-size: clamp(3rem, 5vw, 5rem);
+    line-height: 0.9;
+    margin-bottom: 30px;
+    text-transform: uppercase;
+}
+
+.display-desc {
+    font-size: 1.2rem;
+    line-height: 1.5;
+    max-width: 500px;
+    margin-bottom: 40px;
+    opacity: 0.8;
+}
+
+.display-tags {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
 .tag-container { margin-top: 20px; display: flex; gap: 10px; flex-wrap: wrap; }
 .tag { border: 1px solid currentColor; padding: 5px 10px; font-size: 0.7rem; }
 
-/* --- PROTOCOL --- */
-.protocol-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; }
-.protocol-card { padding: 40px 20px; border-right: 1px solid var(--ink); transition: border-color 0.3s; }
-.protocol-card:last-child { border-right: none; }
-.protocol-card p { line-height: 1.5; opacity: 0.8; }
-.big-num { font-size: 1.2rem; display: block; margin-bottom: 20px; opacity: 1; font-weight: 700; border: 1px solid var(--ink); width: fit-content; padding: 5px 10px; }
+/* Giant background number */
+.bg-huge-num {
+    position: absolute;
+    bottom: -50px;
+    right: -20px;
+    font-size: 20rem;
+    font-family: var(--font-display);
+    font-weight: 800;
+    color: var(--ink);
+    opacity: 0.03; /* Very subtle watermark */
+    z-index: 0;
+    pointer-events: none;
+    line-height: 1;
+}
+
+/* DARK MODE ADJUSTMENT for the Active State */
+body.dark-mode .deck-item:hover,
+body.dark-mode .deck-item.active {
+    background: var(--ink); /* White background */
+    color: var(--bg); /* Black text */
+}
 
 /* --- LEADERSHIP (4 Cols) --- */
 .founders-grid { display: grid; grid-template-columns: repeat(4, 1fr); border-bottom: 1px solid var(--ink); }
@@ -298,7 +426,15 @@ body.dark-mode .nav-logo-img { filter: invert(1) brightness(2); }
 /* =========================================================
    MOBILE FIXES (Breakpoints & Logic)
    ========================================================= */
+
+/* VISIBILITY UTILITIES */
+.desktop-only { display: grid; }
+.mobile-only { display: none; }
+
 @media (max-width: 900px) {
+    /* TOGGLE SERVICES VIEW */
+    .desktop-only { display: none; }
+    .mobile-only { display: block; }
 
     /* 1. LAYOUT RESET */
     .founders-grid, .benefits-grid, .protocol-grid, .contact-layout {
@@ -315,7 +451,7 @@ body.dark-mode .nav-logo-img { filter: invert(1) brightness(2); }
     }
 
     /* 3. BORDER & PADDING RESET */
-    .founder-col, .benefit-box, .protocol-card {
+    .founder-col, .benefit-box, .protocol-card, .mobile-service-card {
         border-right: none !important;
         border-bottom: 1px solid var(--ink);
         padding: 40px 24px;
@@ -411,7 +547,7 @@ html {
     body {
         cursor: none;
     }
-    a, button, input, textarea, .accordion-item {
+    a, button, input, textarea {
         cursor: none !important;
     }
 }
@@ -467,34 +603,6 @@ html {
     }
 }
 
-/* --- LEGAL PAGE SPECIFIC STYLES --- */
-.legal-container {
-    min-height: 100vh;
-}
-
-.legal-body {
-    max-width: 900px;
-    line-height: 1.8;
-}
-
-.legal-body p {
-    margin-bottom: 20px;
-    opacity: 0.8;
-}
-
-.legal-warning-box {
-    margin-top: 80px;
-    padding: 30px;
-    border: 1px solid var(--ink);
-    background: var(--card-hover);
-    font-size: 0.9rem;
-    line-height: 1.5;
-}
-
-.legal-warning-box strong {
-    color: #ff4444;
-}
-
 /* Ensure footer buttons behave like links */
 .footer-link {
     font-size: 0.8rem;
@@ -512,9 +620,4 @@ html {
 /* Fix for cursor hiding on dynamic views */
 .cursor-dot, .cursor-outline {
     z-index: 100000; /* Ensure it stays above everything */
-}
-
-/* Ensure smooth scrolling when navigating home */
-html {
-    scroll-behavior: smooth;
 }

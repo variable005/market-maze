@@ -4,6 +4,46 @@ import "./App.css";
 // IMPORT YOUR LOGO
 import marketMazeLogo from "./assets/marketmaze.svg";
 
+// --- DATA: SERVICES CONFIGURATION ---
+const servicesData = [
+    {
+        id: "01",
+        title: "Market Research",
+        desc: "We conduct in-depth market studies and consumer surveys to deliver actionable insights that drive smart, strategic decisions.",
+        tags: ["DATA MINING", "SURVEYS", "FORECASTING"]
+    },
+    {
+        id: "02",
+        title: "Marketing & Branding",
+        desc: "From digital campaigns and social media to billboard ads and brand storytelling, we craft compelling strategies tailored for diverse audiences.",
+        tags: ["CAMPAIGNS", "IDENTITY", "SOCIAL"]
+    },
+    {
+        id: "03",
+        title: "Ad Shoots & Video",
+        desc: "We create high-impact video content and ad shoots that grab attention and boost your brand’s visibility across all platforms.",
+        tags: ["PRODUCTION", "DIRECTION", "EDITING"]
+    },
+    {
+        id: "04",
+        title: "Logistics Solutions",
+        desc: "Our innovative strategies improve efficiency, cut costs, and keep your operations running smoothly through the supply chain.",
+        tags: ["SUPPLY CHAIN", "FLEET", "OPTIMIZATION"]
+    },
+    {
+        id: "05",
+        title: "Product Management",
+        desc: "We help you refine offerings, solve operational challenges, and build effective go-to-market plans for new and existing products.",
+        tags: ["LIFECYCLE", "ROADMAP", "LAUNCH"]
+    },
+    {
+        id: "06",
+        title: "Business Ops Consulting",
+        desc: "From process optimization to long-term planning, we tackle critical issues to ensure sustainable business growth.",
+        tags: ["SCALING", "PROCESS", "AUDITS"]
+    }
+];
+
 // --- UTILS & COMPONENTS ---
 
 const RevealOnScroll = ({ children }) => {
@@ -51,29 +91,6 @@ const LiveClock = () => {
     );
 };
 
-const Accordion = ({ num, title, desc, tags }) => {
-    const [isOpen, setIsOpen] = useState(false);
-    return (
-        <div className={`accordion-item ${isOpen ? "active" : ""}`} onClick={() => setIsOpen(!isOpen)}>
-            <div className="accordion-header">
-                <div className="accordion-title">
-                    <span className="accordion-num">({num})</span>
-                    {title}
-                </div>
-                <div className="accordion-arrow">▼</div>
-            </div>
-            <div className="accordion-body">
-                <p className="accordion-desc">{desc}</p>
-                <div className="tag-container">
-                    {tags && tags.map(tag => (
-                        <span key={tag} className="tag mono">{tag}</span>
-                    ))}
-                </div>
-            </div>
-        </div>
-    );
-};
-
 const BenefitBox = ({ icon, title, text }) => (
     <div className="benefit-box border-r border-b">
         <div className="mono" style={{marginBottom: '20px', fontSize: '1.5rem'}}>{icon}</div>
@@ -82,47 +99,102 @@ const BenefitBox = ({ icon, title, text }) => (
     </div>
 );
 
-// --- LEGAL COMPONENTS ---
+// --- NEW COMPONENT: SERVICES DECK ---
+const ServicesDeck = () => {
+    const [activeService, setActiveService] = useState(0);
 
-const LegalPage = ({ title, lastUpdated, children }) => (
-    <div className="legal-container">
-        <header className="pad-x pad-y border-b">
-            <div className="hero-meta mono" style={{ color: '#ff4444', fontWeight: '800' }}>
-                [!] DRAFT VERSION: TESTING PURPOSES ONLY
+    return (
+        <section id="services" className="border-b">
+            <RevealOnScroll>
+                <div className="pad-x pad-y-sm border-b header-flex">
+                    <h2>System Capabilities</h2>
+                    <span className="mono">CORE MODULES</span>
+                </div>
+            </RevealOnScroll>
+
+            {/* DESKTOP VIEW: INTERACTIVE DECK */}
+            <div className="deck-container desktop-only">
+                {/* LEFT: MENU */}
+                <div className="deck-menu border-r">
+                    {servicesData.map((service, index) => (
+                        <div
+                            key={service.id}
+                            className={`deck-item ${activeService === index ? 'active' : ''}`}
+                            onMouseEnter={() => setActiveService(index)}
+                        >
+                            <span className="mono deck-num">{service.id}</span>
+                            <span className="deck-title">{service.title}</span>
+                            <div className="deck-indicator">→</div>
+                        </div>
+                    ))}
+                </div>
+
+                {/* RIGHT: DISPLAY */}
+                <div className="deck-display">
+                    <div className="display-content" key={activeService}>
+                        <div className="mono display-header">
+                            <span>// MODULE: {servicesData[activeService].title}</span>
+                            <span className="status-blink">● ACTIVE</span>
+                        </div>
+
+                        <h3 className="display-big-title">
+                            {servicesData[activeService].title.split(" ")[0]}
+                            <br />
+                            <span className="outline-text">
+                                {servicesData[activeService].title.split(" ").slice(1).join(" ")}
+                            </span>
+                        </h3>
+
+                        <p className="display-desc">{servicesData[activeService].desc}</p>
+
+                        <div className="display-tags">
+                            {servicesData[activeService].tags.map(tag => (
+                                <span key={tag} className="tag mono">{tag}</span>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Decorative Background Number */}
+                    <div className="bg-huge-num">{servicesData[activeService].id}</div>
+                </div>
             </div>
-            <h1 style={{ fontSize: 'clamp(2.5rem, 5vw, 5rem)' }}>{title}</h1>
-            <p className="mono" style={{ marginTop: '20px', opacity: 0.6 }}>Last Updated: {lastUpdated}</p>
-        </header>
-        <div className="pad-x pad-y legal-body">
-            {children}
-            <div className="legal-warning-box">
-                <p><strong>LEGAL DISCLAIMER:</strong> This document is a placeholder generated for UI testing for MarketMaze LLP. It is not a legally binding agreement. Please replace this with professional legal documentation before final deployment.</p>
+
+            {/* MOBILE VIEW: STACKED LIST */}
+            <div className="mobile-services mobile-only">
+                {servicesData.map((service) => (
+                    <div key={service.id} className="mobile-service-card border-b pad-x pad-y-sm">
+                        <div className="mono" style={{marginBottom: '10px', opacity:0.5}}>{service.id}</div>
+                        <h3 style={{fontSize: '2rem', marginBottom: '15px'}}>{service.title}</h3>
+                        <p style={{marginBottom: '20px', opacity: 0.8}}>{service.desc}</p>
+                        <div className="tag-container">
+                            {service.tags.map(tag => (
+                                <span key={tag} className="tag mono">{tag}</span>
+                            ))}
+                        </div>
+                    </div>
+                ))}
             </div>
-        </div>
-    </div>
-);
+        </section>
+    );
+};
 
 // --- MAIN APP ---
 
 export default function App() {
     const [theme, setTheme] = useState('light');
-    const [currentView, setCurrentView] = useState('home'); // 'home', 'privacy', 'terms'
 
+    // Cursor Refs
     const dotRef = useRef(null);
     const outlineRef = useRef(null);
 
     const toggleTheme = () => setTheme((prev) => (prev === 'light' ? 'dark' : 'light'));
-
-    const navigateTo = (view) => {
-        setCurrentView(view);
-        window.scrollTo(0, 0);
-    };
 
     useEffect(() => {
         if (theme === 'dark') document.body.classList.add('dark-mode');
         else document.body.classList.remove('dark-mode');
     }, [theme]);
 
+    // Custom Cursor Logic
     useEffect(() => {
         const moveCursor = (e) => {
             const { clientX, clientY } = e;
@@ -143,7 +215,7 @@ export default function App() {
             window.removeEventListener("mousedown", handleInteraction);
             window.removeEventListener("mouseup", handleReset);
         };
-    }, [currentView]); // Re-run cursor logic on view change to re-bind elements
+    }, []);
 
     return (
         <>
@@ -153,20 +225,14 @@ export default function App() {
 
             <div className="container">
                 <nav className="nav-bar">
-                    <div className="logo" onClick={() => navigateTo('home')} style={{cursor: 'pointer'}}>
+                    <div className="logo" onClick={() => window.scrollTo(0,0)} style={{cursor: 'pointer'}}>
                         <img src={marketMazeLogo} alt="MarketMaze" className="nav-logo-img" />
                         MarketMaze
                     </div>
                     <div className="nav-right">
                         <div className="nav-links mono">
-                            {currentView === 'home' ? (
-                                <>
-                                    <a href="#services">Services</a>
-                                    <a href="#team">Team</a>
-                                </>
-                            ) : (
-                                <button onClick={() => navigateTo('home')} className="mono" style={{background: 'none', border: 'none', cursor: 'pointer', color: 'inherit'}}>← Return</button>
-                            )}
+                            <a href="#services">Services</a>
+                            <a href="#team">Team</a>
                         </div>
                         <a href="#contact" className="nav-cta mono">Book Call</a>
                         <button onClick={toggleTheme} className="theme-toggle" aria-label="Toggle Theme">
@@ -179,107 +245,74 @@ export default function App() {
                     </div>
                 </nav>
 
-                {currentView === 'home' && (
-                    <main>
-                        <header className="hero-section pad-x border-b">
-                            <RevealOnScroll>
-                                <div className="hero-meta mono">
-                                    <span>/// EST. 2025</span>
-                                    <span style={{color: 'var(--ink)', fontWeight: 'bold'}}><LiveClock /></span>
-                                    <span>AGENCY PORTAL</span>
-                                </div>
-                                <h1>Build.<br/><span className="outline-text">Scale.</span><br/>Dominate.</h1>
-                                <div className="hero-footer">
-                                    <p className="hero-sub">We are the strategic partner for ambitious founders. Turning uncertainty into measurable leverage.</p>
-                                    <div className="scroll-indicator">↓</div>
-                                </div>
-                            </RevealOnScroll>
-                        </header>
-
-                        <div className="marquee-container border-b">
-                            <div className="marquee-content mono">
-                                // STRATEGIC CONSULTING // DIGITAL TRANSFORMATION // BRAND AUTHORITY // MARKET EXPANSION // REVENUE OPTIMIZATION //
+                <main>
+                    <header className="hero-section pad-x border-b">
+                        <RevealOnScroll>
+                            <div className="hero-meta mono">
+                                {/* REMOVED EST LINE AS REQUESTED */}
+                                <span style={{color: 'var(--ink)', fontWeight: 'bold'}}><LiveClock /></span>
+                                <span>AGENCY PORTAL</span>
                             </div>
+                            <h1>Build.<br/><span className="outline-text">Scale.</span><br/>Dominate.</h1>
+                            <div className="hero-footer">
+                                <p className="hero-sub">We are the strategic partner for ambitious founders. Turning uncertainty into measurable leverage.</p>
+                                <div className="scroll-indicator">↓</div>
+                            </div>
+                        </RevealOnScroll>
+                    </header>
+
+                    <div className="marquee-container border-b">
+                        <div className="marquee-content mono">
+                            // STRATEGIC CONSULTING // DIGITAL TRANSFORMATION // BRAND AUTHORITY // MARKET EXPANSION // REVENUE OPTIMIZATION //
                         </div>
+                    </div>
 
-                        <section className="border-b">
-                            <RevealOnScroll>
-                                <div className="pad-x pad-y-sm border-b header-flex">
-                                    <h2>The Advantage</h2>
-                                    <span className="mono">WHY MarketMaze</span>
-                                </div>
-                            </RevealOnScroll>
-                            <div className="benefits-grid">
-                                <BenefitBox icon="01" title="Strategic Depth" text="We don't just execute tasks; we align every action with your long-term business objectives." />
-                                <BenefitBox icon="02" title="Speed of Execution" text="In the modern economy, speed is currency. We deploy solutions faster than traditional agencies." />
-                                <BenefitBox icon="03" title="Data-First Approach" text="Creativity without data is just art. We use analytics to validate every decision." />
-                                <BenefitBox icon="04" title="Global Standards" text="Based in Hyderabad, building for the world. Our code quality meets international benchmarks." />
+                    <section className="border-b">
+                        <RevealOnScroll>
+                            <div className="pad-x pad-y-sm border-b header-flex">
+                                <h2>The Advantage</h2>
+                                <span className="mono">WHY MarketMaze</span>
                             </div>
-                        </section>
+                        </RevealOnScroll>
+                        <div className="benefits-grid">
+                            <BenefitBox icon="01" title="Strategic Depth" text="We don't just execute tasks; we align every action with your long-term business objectives." />
+                            <BenefitBox icon="02" title="Speed of Execution" text="In the modern economy, speed is currency. We deploy solutions faster than traditional agencies." />
+                            <BenefitBox icon="03" title="Data-First Approach" text="Creativity without data is just art. We use analytics to validate every decision." />
+                            <BenefitBox icon="04" title="Global Standards" text="Based in Hyderabad, building for the world. Our code quality meets international benchmarks." />
+                        </div>
+                    </section>
 
-                        <section id="services">
-                            <RevealOnScroll>
-                                <div className="pad-x pad-y border-b header-flex">
-                                    <h2>Capabilities</h2>
-                                    <span className="mono">CORE OFFERINGS</span>
+                    {/* NEW SERVICES DECK IMPLEMENTATION */}
+                    <ServicesDeck />
+
+                    <section id="team">
+                        <RevealOnScroll>
+                            <div className="pad-x pad-y border-b"><h2>Leadership</h2></div>
+                        </RevealOnScroll>
+                        <div className="founders-grid">
+                            <div className="founder-col"><span className="founder-role mono">EXECUTIVE PARTNER</span><h3 className="founder-name">Abhiram Rentala</h3></div>
+                            <div className="founder-col"><span className="founder-role mono">MANAGING PARTNER</span><h3 className="founder-name">Sasidhar Bezawada</h3></div>
+                            <div className="founder-col"><span className="founder-role mono">DESIGNATED PARTNER</span><h3 className="founder-name">Aman Gyani</h3></div>
+                            <div className="founder-col"><span className="founder-role mono">EXECUTIVE MANAGER</span><h3 className="founder-name">Kalyan Mourya</h3></div>
+                        </div>
+                    </section>
+
+                    <section id="contact" className="pad-x pad-y">
+                        <RevealOnScroll>
+                            <div className="contact-layout">
+                                <div>
+                                    <h2 style={{ lineHeight: '0.9' }}>Start<br/>The<br/>Work.</h2>
+                                    <p className="mono contact-details">HYDERABAD HQ<br/>+91 91107 43392<br/>HELLO@MARKETMAZE.IN</p>
                                 </div>
-                            </RevealOnScroll>
-                            <Accordion num="01" title="Brand Strategy" desc="Comprehensive identity systems that position you as a market leader." tags={['IDENTITY', 'POSITIONING', 'UI/UX']} />
-                            <Accordion num="02" title="Growth Engines" desc="Performance marketing designed to generate revenue." tags={['SEO', 'PERFORMANCE ADS', 'ANALYTICS']} />
-                            <Accordion num="03" title="Media Production" desc="High-fidelity corporate content." tags={['VIDEO', 'PHOTOGRAPHY', 'MOTION']} />
-                        </section>
-
-                        <section id="team">
-                            <RevealOnScroll>
-                                <div className="pad-x pad-y border-b"><h2>Leadership</h2></div>
-                            </RevealOnScroll>
-                            <div className="founders-grid">
-                                <div className="founder-col"><span className="founder-role mono">EXECUTIVE PARTNER</span><h3 className="founder-name">Abhiram Rentala</h3></div>
-                                <div className="founder-col"><span className="founder-role mono">MANAGING PARTNER</span><h3 className="founder-name">Sasidhar Bezawada</h3></div>
-                                <div className="founder-col"><span className="founder-role mono">DESIGNATED PARTNER</span><h3 className="founder-name">Aman Gyani</h3></div>
-                                <div className="founder-col"><span className="founder-role mono">EXECUTIVE MANAGER</span><h3 className="founder-name">Kalyan Mourya</h3></div>
+                                <form className="contact-form" onSubmit={(e) => e.preventDefault()}>
+                                    <div><label className="mono input-label">01. Name</label><input type="text" className="big-input" placeholder="ENTER FULL NAME" /></div>
+                                    <div><label className="mono input-label">02. Email</label><input type="email" className="big-input" placeholder="ENTER EMAIL ADDRESS" /></div>
+                                    <button type="submit" className="submit-btn mono">TRANSMIT PROPOSAL -></button>
+                                </form>
                             </div>
-                        </section>
-
-                        <section id="contact" className="pad-x pad-y">
-                            <RevealOnScroll>
-                                <div className="contact-layout">
-                                    <div>
-                                        <h2 style={{ lineHeight: '0.9' }}>Start<br/>The<br/>Work.</h2>
-                                        <p className="mono contact-details">HYDERABAD HQ<br/>+91 91107 43392<br/>HELLO@MARKETMAZE.IN</p>
-                                    </div>
-                                    <form className="contact-form" onSubmit={(e) => e.preventDefault()}>
-                                        <div><label className="mono input-label">01. Name</label><input type="text" className="big-input" placeholder="ENTER FULL NAME" /></div>
-                                        <div><label className="mono input-label">02. Email</label><input type="email" className="big-input" placeholder="ENTER EMAIL ADDRESS" /></div>
-                                        <button type="submit" className="submit-btn mono">TRANSMIT PROPOSAL -></button>
-                                    </form>
-                                </div>
-                            </RevealOnScroll>
-                        </section>
-                    </main>
-                )}
-
-                {currentView === 'privacy' && (
-                    <LegalPage title="Privacy Policy" lastUpdated="Dec 2025">
-                        <h3 className="mono">01. Information Collection</h3>
-                        <p>We collect information you provide directly to us via our contact forms. This may include your name, email address, and project details.</p>
-                        <h3 className="mono" style={{marginTop: '40px'}}>02. Usage of Data</h3>
-                        <p>Data is used exclusively to contact you regarding your inquiries. We do not sell or share your data with third-party marketing entities.</p>
-                        <h3 className="mono" style={{marginTop: '40px'}}>03. Cookies</h3>
-                        <p>We use session-based cookies to maintain your theme preferences and optimize site performance.</p>
-                    </LegalPage>
-                )}
-
-                {currentView === 'terms' && (
-                    <LegalPage title="Terms of Service" lastUpdated="Dec 2025">
-                        <h3 className="mono">01. Services</h3>
-                        <p>MarketMaze LLP provides strategic consulting and digital transformation services. Engagement terms are defined on a per-project basis.</p>
-                        <h3 className="mono" style={{marginTop: '40px'}}>02. Intellectual Property</h3>
-                        <p>All content on this site, including the design systems and branding, is the property of MarketMaze LLP and protected by Indian copyright laws.</p>
-                        <h3 className="mono" style={{marginTop: '40px'}}>03. Limitation of Liability</h3>
-                        <p>We are not liable for any indirect or consequential losses arising from the use of our digital assets or consulting services.</p>
-                    </LegalPage>
-                )}
+                        </RevealOnScroll>
+                    </section>
+                </main>
 
                 <footer className="border-t pad-x footer-flex">
                     <div className="footer-col">
@@ -293,13 +326,7 @@ export default function App() {
                             <a href="https://www.instagram.com/marketmazein/" target="_blank" rel="noopener noreferrer" className="mono footer-link">Instagram</a>
                         </div>
                     </div>
-                    <div className="footer-col">
-                        <span className="mono">Legal</span>
-                        <div style={{marginTop:'10px', display:'flex', flexDirection:'column', gap:'5px'}}>
-                            <button onClick={() => navigateTo('privacy')} className="mono footer-link" style={{background: 'none', border: 'none', padding: 0, textAlign: 'left', cursor: 'pointer'}}>Privacy Policy</button>
-                            <button onClick={() => navigateTo('terms')} className="mono footer-link" style={{background: 'none', border: 'none', padding: 0, textAlign: 'left', cursor: 'pointer'}}>Terms of Service</button>
-                        </div>
-                    </div>
+                    {/* LEGAL SECTION REMOVED */}
                 </footer>
             </div>
         </>
