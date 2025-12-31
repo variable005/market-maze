@@ -249,7 +249,6 @@ export default function App() {
                     <header className="hero-section pad-x border-b">
                         <RevealOnScroll>
                             <div className="hero-meta mono">
-                                {/* REMOVED EST LINE AS REQUESTED */}
                                 <span style={{color: 'var(--ink)', fontWeight: 'bold'}}><LiveClock /></span>
                                 <span>AGENCY PORTAL</span>
                             </div>
@@ -302,11 +301,48 @@ export default function App() {
                             <div className="contact-layout">
                                 <div>
                                     <h2 style={{ lineHeight: '0.9' }}>Start<br/>The<br/>Work.</h2>
-                                    <p className="mono contact-details">HYDERABAD HQ<br/>+91 91107 43392<br/>HELLO@MARKETMAZE.IN</p>
+                                    <p className="mono contact-details">HYDERABAD HQ<br/>+91 91107 43392<br/>BUSINESS@MARKETMAZE.IN</p>
                                 </div>
-                                <form className="contact-form" onSubmit={(e) => e.preventDefault()}>
-                                    <div><label className="mono input-label">01. Name</label><input type="text" className="big-input" placeholder="ENTER FULL NAME" /></div>
-                                    <div><label className="mono input-label">02. Email</label><input type="email" className="big-input" placeholder="ENTER EMAIL ADDRESS" /></div>
+                                <form
+                                    className="contact-form"
+                                    onSubmit={(e) => {
+                                        e.preventDefault();
+                                        const name = e.target.name.value;
+                                        const email = e.target.email.value;
+                                        const phone = e.target.phone.value;
+                                        const message = e.target.message.value;
+
+                                        // Construct the mailto link with all fields
+                                        const subject = `New Project Inquiry: ${name}`;
+                                        const body = `Name: ${name}%0D%0AEmail: ${email}%0D%0APhone: ${phone}%0D%0A%0D%0AProject Details:%0D%0A${message}`;
+
+                                        // Force open email client
+                                        window.location.href = `mailto:business@marketmaze.in?subject=${subject}&body=${body}`;
+                                    }}
+                                >
+                                    <div>
+                                        <label className="mono input-label">01. Name</label>
+                                        <input type="text" name="name" className="big-input" placeholder="ENTER FULL NAME" required />
+                                    </div>
+                                    <div>
+                                        <label className="mono input-label">02. Email</label>
+                                        <input type="email" name="email" className="big-input" placeholder="ENTER EMAIL ADDRESS" required />
+                                    </div>
+                                    <div>
+                                        <label className="mono input-label">03. Phone Number</label>
+                                        <input type="tel" name="phone" className="big-input" placeholder="ENTER PHONE (OPTIONAL)" />
+                                    </div>
+                                    <div>
+                                        <label className="mono input-label">04. Project Details</label>
+                                        <textarea
+                                            name="message"
+                                            className="big-input"
+                                            placeholder="TELL US ABOUT YOUR GOALS..."
+                                            rows="3"
+                                            style={{resize: 'vertical', minHeight: '100px'}}
+                                            required
+                                        ></textarea>
+                                    </div>
                                     <button type="submit" className="submit-btn mono">TRANSMIT PROPOSAL -></button>
                                 </form>
                             </div>
@@ -326,7 +362,6 @@ export default function App() {
                             <a href="https://www.instagram.com/marketmazein/" target="_blank" rel="noopener noreferrer" className="mono footer-link">Instagram</a>
                         </div>
                     </div>
-                    {/* LEGAL SECTION REMOVED */}
                 </footer>
             </div>
         </>
