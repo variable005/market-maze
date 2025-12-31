@@ -44,6 +44,30 @@ const servicesData = [
     }
 ];
 
+// --- DATA: FAQ CONFIGURATION ---
+const faqData = [
+    {
+        q: "What industries do you specialize in?",
+        a: "We are industry-agnostic but have deep expertise in Manufacturing, Logistics, FMCG, and Tech Startups. Our data-driven approach adapts to any market sector."
+    },
+    {
+        q: "How does the engagement model work?",
+        a: "We offer both project-based retainers and long-term strategic partnerships. We start with a discovery audit to determine the best fit for your goals."
+    },
+    {
+        q: "Do you handle international markets?",
+        a: "Yes. While our HQ is in Hyderabad, our research and digital capabilities allow us to execute campaigns and studies for global markets, including the US, UAE, and EU."
+    },
+    {
+        q: "What is your typical project timeline?",
+        a: "Timelines vary by scope. A market research report may take 2-4 weeks, while a full branding overhaul or logistics optimization project typically runs 3-6 months."
+    },
+    {
+        q: "How do you measure success?",
+        a: "We don't deal in vanity metrics. We define KPIs (Revenue, CAC, ROAS, Efficiency) at the start and report strictly on those numbers."
+    }
+];
+
 // --- UTILS & COMPONENTS ---
 
 const RevealOnScroll = ({ children }) => {
@@ -99,7 +123,7 @@ const BenefitBox = ({ icon, title, text }) => (
     </div>
 );
 
-// --- NEW COMPONENT: SERVICES DECK ---
+// --- COMPONENT: SERVICES DECK ---
 const ServicesDeck = () => {
     const [activeService, setActiveService] = useState(0);
 
@@ -178,6 +202,49 @@ const ServicesDeck = () => {
     );
 };
 
+// --- NEW COMPONENT: FAQ SECTION ---
+const FAQSection = () => {
+    const [openIndex, setOpenIndex] = useState(null);
+
+    const toggleFAQ = (index) => {
+        setOpenIndex(openIndex === index ? null : index);
+    };
+
+    return (
+        <section id="faq" className="border-b">
+            <RevealOnScroll>
+                <div className="pad-x pad-y-sm border-b header-flex">
+                    <h2>Inquiries</h2>
+                    <span className="mono">F.A.Q. PROTOCOL</span>
+                </div>
+            </RevealOnScroll>
+
+            <div className="faq-container">
+                {faqData.map((item, index) => (
+                    <div
+                        key={index}
+                        className={`faq-item ${openIndex === index ? 'open' : ''}`}
+                        onClick={() => toggleFAQ(index)}
+                    >
+                        <div className="faq-question">
+                            <span className="faq-q-text">{item.q}</span>
+                            <span className="faq-toggle mono">
+                                {openIndex === index ? '[-]' : '[+]'}
+                            </span>
+                        </div>
+                        <div className="faq-answer">
+                            <div className="faq-answer-inner">
+                                {item.a}
+                            </div>
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </section>
+    );
+};
+
+
 // --- MAIN APP ---
 
 export default function App() {
@@ -217,7 +284,7 @@ export default function App() {
         };
     }, []);
 
-    // --- NEW: SCROLL FUNCTION ---
+    // --- SCROLL FUNCTION ---
     const handleScrollDown = () => {
         const nextSection = document.getElementById('explore-target');
         if (nextSection) {
@@ -241,6 +308,7 @@ export default function App() {
                         <div className="nav-links mono">
                             <a href="#services">Services</a>
                             <a href="#team">Team</a>
+                            <a href="#faq">FAQ</a>
                         </div>
                         <a href="#contact" className="nav-cta mono">Contact</a>
                         <button onClick={toggleTheme} className="theme-toggle" aria-label="Toggle Theme">
@@ -298,7 +366,7 @@ export default function App() {
 
                     <ServicesDeck />
 
-                    <section id="team">
+                    <section id="team" className="border-b">
                         <RevealOnScroll>
                             <div className="pad-x pad-y border-b"><h2>Leadership</h2></div>
                         </RevealOnScroll>
@@ -309,6 +377,9 @@ export default function App() {
                             <div className="founder-col"><span className="founder-role mono">EXECUTIVE MANAGER</span><h3 className="founder-name">Kalyan Mourya</h3></div>
                         </div>
                     </section>
+
+                    {/* NEW FAQ SECTION */}
+                    <FAQSection />
 
                     <section id="contact" className="pad-x pad-y">
                         <RevealOnScroll>
