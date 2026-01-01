@@ -386,7 +386,7 @@ export default function App() {
                             <div className="contact-layout">
                                 <div>
                                     <h2 style={{ lineHeight: '0.9' }}>Start<br/>The<br/>Work.</h2>
-                                    <p className="mono contact-details">HYDERABAD HQ<br/>+91 91107 43392<br/>BUSINESS@MARKETMAZE.IN</p>
+                                    <p className="mono contact-details">HYDERABAD HQ<br/>+91 91771 06693<br/>BUSINESS@MARKETMAZE.IN</p>
                                 </div>
                                 <form
                                     className="contact-form"
