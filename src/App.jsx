@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import "./App.css";
 
 // IMPORT YOUR LOGO
+// Make sure this path is correct based on your folder structure
 import marketMazeLogo from "./assets/marketmaze.svg";
 
 // --- DATA: SERVICES CONFIGURATION ---
@@ -130,19 +131,19 @@ const MazeGame = () => {
     const [status, setStatus] = useState("idle"); // idle, playing, won
     const [stats, setStats] = useState({ moves: 0, time: 0 });
 
-    // Game State Refs (Use refs for animation loop performance)
+    // Game State Refs
     const gameState = useRef({
         maze: [],
-        cols: 25, // Must be odd
-        rows: 25, // Must be odd
-        cellSize: 0, // Calculated dynamically
-        player: { x: 1, y: 1 }, // Logical Grid Position
-        visual: { x: 1, y: 1 }, // Pixel/Lerp Position
-        trail: [], // Breadcrumbs
-        particles: [], // Explosion effects
+        cols: 25,
+        rows: 25,
+        cellSize: 0,
+        player: { x: 1, y: 1 },
+        visual: { x: 1, y: 1 },
+        trail: [],
+        particles: [],
         startTime: 0,
         animationId: null,
-        visibilityRadius: 5 // Grid cells radius
+        visibilityRadius: 5
     });
 
     // 1. MAZE GENERATION (Recursive Backtracker)
@@ -187,9 +188,8 @@ const MazeGame = () => {
     const startGame = () => {
         if (!containerRef.current) return;
 
-        // Resize logic
         const w = containerRef.current.offsetWidth;
-        // Limit max width for gameplay sanity
+        // Limit max width for gameplay sanity (keep cells readable)
         const maxW = Math.min(w, 600);
         gameState.current.cellSize = Math.floor(maxW / gameState.current.cols);
 
@@ -206,7 +206,7 @@ const MazeGame = () => {
         window.focus();
     };
 
-    // 3. RENDER LOOP (The "High Tech" Visuals)
+    // 3. RENDER LOOP
     useEffect(() => {
         if (status !== "playing" && status !== "won") {
             if (gameState.current.animationId) cancelAnimationFrame(gameState.current.animationId);
@@ -217,7 +217,6 @@ const MazeGame = () => {
         const ctx = canvas.getContext("2d");
         const { cols, rows, cellSize } = gameState.current;
 
-        // Set canvas physical size
         canvas.width = cols * cellSize;
         canvas.height = rows * cellSize;
 
@@ -225,9 +224,6 @@ const MazeGame = () => {
         const style = getComputedStyle(document.body);
         const ink = style.getPropertyValue('--ink').trim();
         const bg = style.getPropertyValue('--bg').trim();
-
-        // Parse Ink color to RGB for opacity tricks
-        // (Simple hack: assume it's hex or simple name, defaults to black if complex)
 
         const render = () => {
             const now = Date.now();
@@ -238,7 +234,7 @@ const MazeGame = () => {
             }
 
             // B. Smooth Visual Movement (Lerp)
-            const speed = 0.2; // Smoothness factor
+            const speed = 0.2;
             gameState.current.visual.x += (gameState.current.player.x - gameState.current.visual.x) * speed;
             gameState.current.visual.y += (gameState.current.player.y - gameState.current.visual.y) * speed;
 
@@ -246,7 +242,7 @@ const MazeGame = () => {
             ctx.fillStyle = bg;
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            // D. Draw Trail (Breadcrumbs)
+            // D. Draw Trail
             ctx.fillStyle = ink;
             gameState.current.trail.forEach((pos, i) => {
                 const alpha = (i / gameState.current.trail.length) * 0.3;
@@ -260,8 +256,7 @@ const MazeGame = () => {
             });
             ctx.globalAlpha = 1.0;
 
-            // E. Draw Walls (With Fog of War logic)
-            // If won, show everything. If playing, only show radius.
+            // E. Draw Walls (Fog of War)
             const playerVisX = gameState.current.visual.x;
             const playerVisY = gameState.current.visual.y;
             const radius = gameState.current.visibilityRadius;
@@ -271,7 +266,6 @@ const MazeGame = () => {
                     const dist = Math.hypot(x - playerVisX, y - playerVisY);
 
                     if (status === "won" || dist < radius) {
-                        // Calculate opacity based on distance (Fading edge)
                         let opacity = 1;
                         if (status !== "won") {
                             opacity = Math.max(0, 1 - (dist / radius));
@@ -280,9 +274,8 @@ const MazeGame = () => {
                         if (gameState.current.maze[y][x] === 1) {
                             ctx.fillStyle = ink;
                             ctx.globalAlpha = opacity;
-                            ctx.fillRect(x * cellSize, y * cellSize, cellSize + 1, cellSize + 1); // +1 fixes subpixel gaps
+                            ctx.fillRect(x * cellSize, y * cellSize, cellSize + 1, cellSize + 1);
                         }
-                        // Draw Grid lines for "Floor"
                         else {
                             ctx.strokeStyle = ink;
                             ctx.globalAlpha = opacity * 0.1;
@@ -297,7 +290,6 @@ const MazeGame = () => {
             // F. Draw Goal
             const goalX = cols - 2;
             const goalY = rows - 2;
-            // Pulse Effect
             const pulse = 1 + Math.sin(now * 0.01) * 0.2;
             ctx.strokeStyle = '#00ff00';
             ctx.lineWidth = 2;
@@ -315,13 +307,12 @@ const MazeGame = () => {
             ctx.fillStyle = '#ff0055';
             ctx.shadowColor = '#ff0055';
             ctx.shadowBlur = 15;
-            // Draw circle
             ctx.beginPath();
             ctx.arc(px + cellSize/2, py + cellSize/2, cellSize * 0.3, 0, Math.PI * 2);
             ctx.fill();
             ctx.shadowBlur = 0;
 
-            // H. Particle System (Win State)
+            // H. Particles
             if (status === "won") {
                 gameState.current.particles.forEach((p, i) => {
                     p.x += p.vx;
@@ -351,18 +342,14 @@ const MazeGame = () => {
             const nx = x + dx;
             const ny = y + dy;
 
-            // Collision Check
             if (gameState.current.maze[ny][nx] === 0) {
                 gameState.current.player = { x: nx, y: ny };
-                // Add Trail
                 gameState.current.trail.push({ x: nx, y: ny });
                 setStats(prev => ({ ...prev, moves: prev.moves + 1 }));
 
-                // Win Check
                 if (nx === gameState.current.cols - 2 && ny === gameState.current.rows - 2) {
                     setStatus("won");
-                    // Explode Particles
-                    const canvas = canvasRef.current;
+                    // Explosion
                     const particles = [];
                     for(let i=0; i<50; i++) {
                         particles.push({
@@ -391,8 +378,6 @@ const MazeGame = () => {
         };
 
         window.addEventListener("keydown", handleKey);
-
-        // Expose move to mobile buttons
         gameState.current.move = move;
 
         return () => window.removeEventListener("keydown", handleKey);
@@ -409,11 +394,13 @@ const MazeGame = () => {
                     </div>
                 </div>
 
+                {/* UPDATED: CLASS alert-text ADDED */}
                 <div className="maze-wrapper">
                     {/* OVERLAYS */}
                     {status === "idle" && (
                         <div className="maze-overlay">
-                            <h3 className="mono glitch-text">MARKET UNCERTAINTY DETECTED</h3>
+                            {/* CHANGED FROM glitch-text TO alert-text */}
+                            <h3 className="mono alert-text">MARKET UNCERTAINTY DETECTED</h3>
                             <p className="mono small-text" style={{margin:'20px 0'}}>
                                 The market is shrouded in fog. <br/>Navigate the data streams to find clarity.
                             </p>
@@ -683,7 +670,6 @@ export default function App() {
                         </div>
                     </section>
 
-                    {/* NEW: MASTER THE MAZE GAME */}
                     <MazeGame />
 
                     <FAQSection />

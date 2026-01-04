@@ -120,14 +120,13 @@ body::after {
     70% { box-shadow: 0 0 0 6px rgba(0, 255, 0, 0); }
     100% { box-shadow: 0 0 0 0 rgba(0, 255, 0, 0); }
 }
-@keyframes glitch {
-    0% { transform: translate(0) }
-    20% { transform: translate(-2px, 2px) }
-    40% { transform: translate(-2px, -2px) }
-    60% { transform: translate(2px, 2px) }
-    80% { transform: translate(2px, -2px) }
-    100% { transform: translate(0) }
+
+/* REPLACED GLITCH WITH PROFESSIONAL ALERT PULSE */
+@keyframes alert-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
 }
+
 @keyframes scanline {
     0% { transform: translateY(-100%); }
     100% { transform: translateY(100%); }
@@ -157,7 +156,15 @@ h3 { font-size: 1.5rem; margin-bottom: 15px; }
 .mono { font-family: var(--font-tech); font-size: 0.8rem; letter-spacing: 0.05em; text-transform: uppercase; }
 .outline-text { -webkit-text-stroke: 1px var(--ink); color: transparent; transition: all 0.3s; }
 .outline-text:hover { color: var(--ink); cursor: default; }
-.glitch-text { animation: glitch 0.5s infinite; color: #ff0055; }
+
+/* UPDATED ALERT TEXT CLASS */
+.alert-text {
+    color: #ff0055;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    animation: alert-pulse 4s infinite ease-in-out;
+}
 
 /* --- UTILS --- */
 .container {
@@ -324,15 +331,20 @@ body.dark-mode .deck-item:hover, body.dark-mode .deck-item.active { background: 
 .faq-item.open .faq-answer { max-height: 300px; }
 .faq-answer-inner { padding: 0 4vw 40px 4vw; font-size: 1.1rem; opacity: 0.8; line-height: 1.6; max-width: 800px; }
 
-/* --- MASTER THE MAZE (NEW) --- */
+/* --- MASTER THE MAZE (UPDATED) --- */
 .maze-wrapper {
     position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background: rgba(0,0,0,0.02); /* Slight tint for container */
-    overflow: hidden; /* For scanlines */
+    background: rgba(0,0,0,0.02);
+    overflow: hidden;
+
+    /* FIXED: ADDED PADDING AND BORDERS TO FIX CROPPED LOOK */
+    padding: 80px 0;
+    border-top: 1px solid var(--grid);
+    border-bottom: 1px solid var(--grid);
 }
 
 .maze-canvas {
