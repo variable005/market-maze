@@ -410,12 +410,12 @@ const MazeGame = () => {
 
                     {status === "won" && (
                         <div className="maze-overlay glass">
-                            <h3 className="mono" style={{color: '#00ff00'}}>CLARITY ACHIEVED</h3>
+                            <h3 className="mono" style={{color: '#00ff00'}}>GOAL ACHIEVED</h3>
                             <p className="mono" style={{margin: '20px 0'}}>
                                 Optimization Complete.<br/>
                                 Performance: {stats.moves} moves in {stats.time}s.
                             </p>
-                            <button className="submit-btn mono" onClick={startGame}>RE-RUN SIMULATION</button>
+                            <button className="submit-btn mono" onClick={startGame}>RE-RUN TEST</button>
                         </div>
                     )}
 
