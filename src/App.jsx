@@ -514,18 +514,16 @@ export default function App() {
 
             <MenuPopup isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
 
-            {/* --- UPDATED MOBILE DOCK WITH PLUS TOGGLE --- */}
+            {/* --- MOBILE DOCK --- */}
             <div className="mobile-dock mobile-only">
                 <button
                     className={`dock-btn mono ${isMenuOpen ? 'active' : ''}`}
                     onClick={() => setIsMenuOpen(!isMenuOpen)}
                     style={{ fontSize: '1.5rem', fontWeight: '500', display: 'grid', placeItems: 'center' }}
                 >
-                    {/* TOGGLE LOGIC: + for menu, × for close */}
                     {isMenuOpen ? '×' : '+'}
                 </button>
                 <div className="dock-divider"></div>
-                {/* --- RENAMED START BUTTON TO CONTACT --- */}
                 <a href="#contact" className="dock-cta mono">
                     <span className="status-dot"></span> Contact
                 </a>
@@ -539,14 +537,13 @@ export default function App() {
                     </div>
                     <div className="nav-right">
 
-                        {/* --- UPDATED DESKTOP TOGGLE --- */}
-                        <div className="desktop-only" style={{marginRight: '20px'}}>
-                            <button className="mono nav-menu-trigger" onClick={() => setIsMenuOpen(true)}>
-                                [ + ]
-                            </button>
+                        {/* --- NEW DESKTOP NAVIGATION LINKS --- */}
+                        <div className="desktop-only" style={{display: 'flex', gap: '30px', marginRight: '20px'}}>
+                            <a href="#services" className="nav-link mono">Services</a>
+                            <a href="#team" className="nav-link mono">Leadership</a>
+                            <a href="#explore-target" className="nav-link mono">Play</a>
+                            <a href="#faq" className="nav-link mono">FAQ</a>
                         </div>
-
-                        {/* --- REMOVED CONTACT BUTTON FROM HERE --- */}
 
                         <button onClick={toggleTheme} className="theme-toggle" aria-label="Toggle Theme">
                             {theme === 'light' ? (

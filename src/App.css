@@ -109,6 +109,22 @@ h3 { font-size: 1.5rem; margin-bottom: 15px; }
 body.dark-mode .nav-logo-img { filter: invert(1) brightness(2); }
 .nav-right { display: flex; align-items: center; gap: 20px; }
 
+/* --- NEW NAV LINKS --- */
+.nav-link {
+    text-decoration: none;
+    color: var(--ink);
+    opacity: 0.6;
+    transition: opacity 0.3s, transform 0.2s;
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+.nav-link:hover {
+    opacity: 1;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+}
+
 .nav-menu-trigger { background: transparent; border: none; cursor: pointer; color: var(--ink); font-weight: 700; font-size: 0.8rem; letter-spacing: 0.05em; transition: opacity 0.3s; }
 .nav-menu-trigger:hover { opacity: 0.6; }
 
