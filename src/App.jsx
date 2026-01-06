@@ -339,6 +339,8 @@ const ServicesDeck = () => {
                     <span className="mono">CORE MODULES</span>
                 </div>
             </RevealOnScroll>
+
+            {/* DESKTOP VIEW */}
             <div className="deck-container desktop-only">
                 <div className="deck-menu border-r">
                     {servicesData.map((service, index) => (
@@ -366,15 +368,28 @@ const ServicesDeck = () => {
                     <div className="bg-huge-num">{servicesData[activeService].id}</div>
                 </div>
             </div>
-            <div className="mobile-services mobile-only">
-                {servicesData.map((service) => (
-                    <div key={service.id} className="mobile-service-card border-b pad-x pad-y-sm">
-                        <div className="mono" style={{marginBottom: '10px', opacity:0.5}}>{service.id}</div>
-                        <h3 style={{fontSize: '2rem', marginBottom: '15px'}}>{service.title}</h3>
-                        <p style={{marginBottom: '20px', opacity: 0.8}}>{service.desc}</p>
-                        <div className="tag-container">{service.tags.map(tag => (<span key={tag} className="tag mono">{tag}</span>))}</div>
-                    </div>
-                ))}
+
+            {/* MOBILE VIEW - OPTIMIZED HORIZONTAL CAROUSEL */}
+            <div className="mobile-services-container mobile-only">
+                <p className="mono swipe-hint text-center opacity-50" style={{marginBottom: '30px', textAlign: 'center'}}>&lt;&lt; SWIPE TO EXPLORE &gt;&gt;</p>
+
+                <div className="mobile-carousel">
+                    {servicesData.map((service) => (
+                        <div key={service.id} className="mobile-service-card">
+                            <div className="card-top-row">
+                                <span className="mono card-id">{service.id}</span>
+                                <span className="mono card-dots">●●●</span>
+                            </div>
+                            <h3 className="card-title">{service.title}</h3>
+                            <p className="card-desc">{service.desc}</p>
+                            <div className="tag-container mt-auto">
+                                {service.tags.map(tag => (<span key={tag} className="tag mono">{tag}</span>))}
+                            </div>
+                        </div>
+                    ))}
+                    {/* SPACER FOR END OF SCROLL */}
+                    <div style={{minWidth: '20px'}}></div>
+                </div>
             </div>
         </section>
     );
@@ -409,9 +424,6 @@ const FAQSection = () => {
 
 // --- NEW COMPONENT: LIQUID POPUP MENU ---
 const MenuPopup = ({ isOpen, onClose }) => {
-    // Only render if open to allow animation entry, handling mount in CSS usually preferred
-    // but for simplicity we toggle class in container
-
     const links = [
         { name: "Services", href: "#services", id: "01" },
         { name: "Leadership", href: "#team", id: "02" },
@@ -421,15 +433,12 @@ const MenuPopup = ({ isOpen, onClose }) => {
 
     return (
         <div className={`menu-overlay ${isOpen ? 'open' : ''}`}>
-            {/* Backdrop click to close */}
             <div className="menu-backdrop" onClick={onClose}></div>
-
             <div className="menu-card">
                 <div className="menu-header mono">
                     <span>Navigation</span>
                     <button onClick={onClose} className="menu-close-btn">Close</button>
                 </div>
-
                 <div className="menu-links">
                     {links.map((link) => (
                         <a href={link.href} key={link.id} className="menu-link-item" onClick={onClose}>
@@ -437,13 +446,11 @@ const MenuPopup = ({ isOpen, onClose }) => {
                             <span className="menu-link-text">{link.name}</span>
                         </a>
                     ))}
-                    {/* Primary CTA */}
                     <a href="#contact" className="menu-link-item highlight" onClick={onClose}>
                         <span className="menu-link-num mono">>></span>
                         <span className="menu-link-text">Start Project</span>
                     </a>
                 </div>
-
                 <div className="menu-footer mono">
                     <div className="menu-stat-row">
                         <span>Hyderabad, IN</span>
@@ -470,7 +477,6 @@ export default function App() {
     }, [theme]);
 
     useEffect(() => {
-        // Lock body scroll when menu is open
         if (isMenuOpen) document.body.style.overflow = 'hidden';
         else document.body.style.overflow = 'auto';
     }, [isMenuOpen]);
@@ -506,16 +512,17 @@ export default function App() {
             <div ref={outlineRef} className="cursor-outline"></div>
             <div className="noise"></div>
 
-            {/* POPUP MENU */}
             <MenuPopup isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
 
-            {/* MOBILE BOTTOM DOCK */}
+            {/* --- UPDATED MOBILE DOCK WITH PLUS TOGGLE --- */}
             <div className="mobile-dock mobile-only">
                 <button
                     className={`dock-btn mono ${isMenuOpen ? 'active' : ''}`}
                     onClick={() => setIsMenuOpen(!isMenuOpen)}
+                    style={{ fontSize: '1.5rem', fontWeight: '500', display: 'grid', placeItems: 'center' }}
                 >
-                    {isMenuOpen ? 'Close' : 'Menu'}
+                    {/* TOGGLE LOGIC: + for menu, × for close */}
+                    {isMenuOpen ? '×' : '+'}
                 </button>
                 <div className="dock-divider"></div>
                 <a href="#contact" className="dock-cta mono">
@@ -530,9 +537,12 @@ export default function App() {
                         MarketMaze
                     </div>
                     <div className="nav-right">
-                        {/* REPLACED INLINE LINKS WITH MENU BUTTON ON DESKTOP */}
+
+                        {/* --- UPDATED DESKTOP TOGGLE --- */}
                         <div className="desktop-only" style={{marginRight: '20px'}}>
-                            <button className="mono nav-menu-trigger" onClick={() => setIsMenuOpen(true)}>Menu</button>
+                            <button className="mono nav-menu-trigger" onClick={() => setIsMenuOpen(true)}>
+                                [ + ]
+                            </button>
                         </div>
 
                         <a href="#contact" className="nav-cta mono desktop-only">Contact</a>
