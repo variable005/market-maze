@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import "./App.css";
 
 // IMPORT YOUR LOGO
-// Make sure this path is correct based on your folder structure
 import marketMazeLogo from "./assets/marketmaze.svg";
 
 // --- DATA: SERVICES CONFIGURATION ---
@@ -10,63 +9,48 @@ const servicesData = [
     {
         id: "01",
         title: "Market Research",
-        desc: "We conduct in-depth market studies and consumer surveys to deliver actionable insights that drive smart, strategic decisions.",
+        desc: "We conduct in-depth market studies and consumer surveys to deliver actionable insights.",
         tags: ["DATA MINING", "SURVEYS", "FORECASTING"]
     },
     {
         id: "02",
         title: "Marketing & Branding",
-        desc: "From digital campaigns and social media to billboard ads and brand storytelling, we craft compelling strategies tailored for diverse audiences.",
+        desc: "From digital campaigns to brand storytelling, we craft compelling strategies.",
         tags: ["CAMPAIGNS", "IDENTITY", "SOCIAL"]
     },
     {
         id: "03",
         title: "Ad Shoots & Video",
-        desc: "We create high-impact video content and ad shoots that grab attention and boost your brand’s visibility across all platforms.",
+        desc: "We create high-impact video content that grabs attention.",
         tags: ["PRODUCTION", "DIRECTION", "EDITING"]
     },
     {
         id: "04",
         title: "Logistics Solutions",
-        desc: "Our innovative strategies improve efficiency, cut costs, and keep your operations running smoothly through the supply chain.",
+        desc: "Innovative strategies to improve efficiency and cut costs.",
         tags: ["SUPPLY CHAIN", "FLEET", "OPTIMIZATION"]
     },
     {
         id: "05",
         title: "Product Management",
-        desc: "We help you refine offerings, solve operational challenges, and build effective go-to-market plans for new and existing products.",
+        desc: "We help you refine offerings and build effective go-to-market plans.",
         tags: ["LIFECYCLE", "ROADMAP", "LAUNCH"]
     },
     {
         id: "06",
         title: "Business Ops Consulting",
-        desc: "From process optimization to long-term planning, we tackle critical issues to ensure sustainable business growth.",
+        desc: "Tackling critical issues to ensure sustainable business growth.",
         tags: ["SCALING", "PROCESS", "AUDITS"]
     }
 ];
 
-// --- DATA: FAQ CONFIGURATION ---
+// --- DATA: FAQ ---
 const faqData = [
-    {
-        q: "What industries do you specialize in?",
-        a: "We are industry-agnostic but have deep expertise in Manufacturing, Logistics, FMCG, and Tech Startups. Our data-driven approach adapts to any market sector."
-    },
-    {
-        q: "How does the engagement model work?",
-        a: "We offer both project-based retainers and long-term strategic partnerships. We start with a discovery audit to determine the best fit for your goals."
-    },
-    {
-        q: "Do you handle international markets?",
-        a: "Yes. While our HQ is in Hyderabad, our research and digital capabilities allow us to execute campaigns and studies for global markets, including the US, UAE, and EU."
-    },
-    {
-        q: "What is your typical project timeline?",
-        a: "Timelines vary by scope. A market research report may take 2-4 weeks, while a full branding overhaul or logistics optimization project typically runs 3-6 months."
-    },
-    {
-        q: "How do you measure success?",
-        a: "We don't deal in vanity metrics. We define KPIs (Revenue, CAC, ROAS, Efficiency) at the start and report strictly on those numbers."
-    }
+    { q: "What industries do you specialize in?", a: "We are industry-agnostic but have deep expertise in Manufacturing, Logistics, FMCG, and Tech Startups." },
+    { q: "How does the engagement model work?", a: "We offer both project-based retainers and long-term strategic partnerships." },
+    { q: "Do you handle international markets?", a: "Yes. We execute campaigns and studies for global markets, including the US, UAE, and EU." },
+    { q: "What is your typical project timeline?", a: "Timelines vary. A research report may take 2-4 weeks, while a branding overhaul takes 3-6 months." },
+    { q: "How do you measure success?", a: "We define KPIs (Revenue, CAC, ROAS, Efficiency) at the start and report strictly on those numbers." }
 ];
 
 // --- UTILS & COMPONENTS ---
@@ -77,25 +61,14 @@ const RevealOnScroll = ({ children }) => {
 
     useEffect(() => {
         const observer = new IntersectionObserver(
-            ([entry]) => {
-                if (entry.isIntersecting) {
-                    setIsVisible(true);
-                    observer.unobserve(entry.target);
-                }
-            },
+            ([entry]) => { if (entry.isIntersecting) { setIsVisible(true); observer.unobserve(entry.target); } },
             { threshold: 0.1 }
         );
         if (ref.current) observer.observe(ref.current);
-        return () => {
-            if (ref.current) observer.unobserve(ref.current);
-        };
+        return () => { if (ref.current) observer.unobserve(ref.current); };
     }, []);
 
-    return (
-        <div ref={ref} className={`reveal ${isVisible ? "visible" : ""}`}>
-            {children}
-        </div>
-    );
+    return <div ref={ref} className={`reveal ${isVisible ? "visible" : ""}`}>{children}</div>;
 };
 
 const LiveClock = () => {
@@ -104,70 +77,47 @@ const LiveClock = () => {
         const timer = setInterval(() => setTime(new Date()), 1000);
         return () => clearInterval(timer);
     }, []);
-    return (
-        <span>
-            {time.toLocaleTimeString('en-US', {
-                hour12: false,
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit'
-            })} IST
-        </span>
-    );
+    return <span>{time.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' })} IST</span>;
 };
 
 const BenefitBox = ({ icon, title, text }) => (
     <div className="benefit-box border-r border-b">
-        <div className="mono" style={{marginBottom: '20px', fontSize: '1.5rem'}}>{icon}</div>
+        <div className="mono" style={{marginBottom: '20px', fontSize: '1.2rem'}}>{icon}</div>
         <h3 className="benefit-title">{title}</h3>
         <p className="benefit-text">{text}</p>
     </div>
 );
 
-// --- COMPONENT: ADVANCED MAZE GAME ---
+// --- COMPONENT: MAZE GAME ---
 const MazeGame = () => {
     const canvasRef = useRef(null);
     const containerRef = useRef(null);
-    const [status, setStatus] = useState("idle"); // idle, playing, won
+    const [status, setStatus] = useState("idle");
     const [stats, setStats] = useState({ moves: 0, time: 0 });
 
-    // Game State Refs
     const gameState = useRef({
-        maze: [],
-        cols: 25,
-        rows: 25,
-        cellSize: 0,
-        player: { x: 1, y: 1 },
-        visual: { x: 1, y: 1 },
-        trail: [],
-        particles: [],
-        startTime: 0,
-        animationId: null,
-        visibilityRadius: 5
+        maze: [], cols: 25, rows: 25, cellSize: 0,
+        player: { x: 1, y: 1 }, visual: { x: 1, y: 1 },
+        trail: [], particles: [], startTime: 0,
+        animationId: null, visibilityRadius: 5
     });
 
-    // 1. MAZE GENERATION (Recursive Backtracker)
     const generateMaze = useCallback(() => {
         const { cols, rows } = gameState.current;
-        const newMaze = Array(rows).fill().map(() => Array(cols).fill(1)); // 1 = Wall
-
+        const newMaze = Array(rows).fill().map(() => Array(cols).fill(1));
         const stack = [];
         const start = { x: 1, y: 1 };
         newMaze[start.y][start.x] = 0;
         stack.push(start);
-
         const dirs = [{ x: 0, y: -2 }, { x: 0, y: 2 }, { x: -2, y: 0 }, { x: 2, y: 0 }];
 
         while (stack.length > 0) {
             const current = stack[stack.length - 1];
-            // Shuffle
             const shuffledDirs = dirs.sort(() => Math.random() - 0.5);
             let moved = false;
-
             for (let dir of shuffledDirs) {
                 const nx = current.x + dir.x;
                 const ny = current.y + dir.y;
-
                 if (nx > 0 && nx < cols - 1 && ny > 0 && ny < rows - 1 && newMaze[ny][nx] === 1) {
                     newMaze[ny][nx] = 0;
                     newMaze[current.y + (dir.y / 2)][current.x + (dir.x / 2)] = 0;
@@ -178,21 +128,15 @@ const MazeGame = () => {
             }
             if (!moved) stack.pop();
         }
-
-        // Set Exit
         newMaze[rows - 2][cols - 2] = 0;
         return newMaze;
     }, []);
 
-    // 2. START GAME
     const startGame = () => {
         if (!containerRef.current) return;
-
         const w = containerRef.current.offsetWidth;
-        // Limit max width for gameplay sanity (keep cells readable)
         const maxW = Math.min(w, 600);
         gameState.current.cellSize = Math.floor(maxW / gameState.current.cols);
-
         gameState.current.maze = generateMaze();
         gameState.current.player = { x: 1, y: 1 };
         gameState.current.visual = { x: 1, y: 1 };
@@ -201,82 +145,56 @@ const MazeGame = () => {
         gameState.current.startTime = Date.now();
         setStats({ moves: 0, time: 0 });
         setStatus("playing");
-
-        // Focus for keyboard
         window.focus();
     };
 
-    // 3. RENDER LOOP
     useEffect(() => {
         if (status !== "playing" && status !== "won") {
             if (gameState.current.animationId) cancelAnimationFrame(gameState.current.animationId);
             return;
         }
-
         const canvas = canvasRef.current;
         const ctx = canvas.getContext("2d");
         const { cols, rows, cellSize } = gameState.current;
-
         canvas.width = cols * cellSize;
         canvas.height = rows * cellSize;
-
-        // Get CSS Colors
         const style = getComputedStyle(document.body);
         const ink = style.getPropertyValue('--ink').trim();
         const bg = style.getPropertyValue('--bg').trim();
 
         const render = () => {
             const now = Date.now();
-
-            // A. Update Time
-            if (status === 'playing') {
-                setStats(prev => ({ ...prev, time: Math.floor((now - gameState.current.startTime) / 1000) }));
-            }
-
-            // B. Smooth Visual Movement (Lerp)
+            if (status === 'playing') setStats(prev => ({ ...prev, time: Math.floor((now - gameState.current.startTime) / 1000) }));
             const speed = 0.2;
             gameState.current.visual.x += (gameState.current.player.x - gameState.current.visual.x) * speed;
             gameState.current.visual.y += (gameState.current.player.y - gameState.current.visual.y) * speed;
-
-            // C. Clear Canvas
             ctx.fillStyle = bg;
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            // D. Draw Trail
+            // Trail
             ctx.fillStyle = ink;
             gameState.current.trail.forEach((pos, i) => {
                 const alpha = (i / gameState.current.trail.length) * 0.3;
                 ctx.globalAlpha = alpha;
-                ctx.fillRect(
-                    pos.x * cellSize + cellSize * 0.35,
-                    pos.y * cellSize + cellSize * 0.35,
-                    cellSize * 0.3,
-                    cellSize * 0.3
-                );
+                ctx.fillRect(pos.x * cellSize + cellSize * 0.35, pos.y * cellSize + cellSize * 0.35, cellSize * 0.3, cellSize * 0.3);
             });
             ctx.globalAlpha = 1.0;
 
-            // E. Draw Walls (Fog of War)
+            // Fog & Walls
             const playerVisX = gameState.current.visual.x;
             const playerVisY = gameState.current.visual.y;
             const radius = gameState.current.visibilityRadius;
-
             for (let y = 0; y < rows; y++) {
                 for (let x = 0; x < cols; x++) {
                     const dist = Math.hypot(x - playerVisX, y - playerVisY);
-
                     if (status === "won" || dist < radius) {
                         let opacity = 1;
-                        if (status !== "won") {
-                            opacity = Math.max(0, 1 - (dist / radius));
-                        }
-
+                        if (status !== "won") opacity = Math.max(0, 1 - (dist / radius));
                         if (gameState.current.maze[y][x] === 1) {
                             ctx.fillStyle = ink;
                             ctx.globalAlpha = opacity;
                             ctx.fillRect(x * cellSize, y * cellSize, cellSize + 1, cellSize + 1);
-                        }
-                        else {
+                        } else {
                             ctx.strokeStyle = ink;
                             ctx.globalAlpha = opacity * 0.1;
                             ctx.lineWidth = 1;
@@ -287,23 +205,17 @@ const MazeGame = () => {
             }
             ctx.globalAlpha = 1.0;
 
-            // F. Draw Goal
+            // Goal
             const goalX = cols - 2;
             const goalY = rows - 2;
             const pulse = 1 + Math.sin(now * 0.01) * 0.2;
             ctx.strokeStyle = '#00ff00';
             ctx.lineWidth = 2;
-            ctx.strokeRect(
-                (goalX * cellSize) + (cellSize * 0.1),
-                (goalY * cellSize) + (cellSize * 0.1),
-                cellSize * 0.8 * pulse,
-                cellSize * 0.8 * pulse
-            );
+            ctx.strokeRect((goalX * cellSize) + (cellSize * 0.1), (goalY * cellSize) + (cellSize * 0.1), cellSize * 0.8 * pulse, cellSize * 0.8 * pulse);
 
-            // G. Draw Player
+            // Player
             const px = gameState.current.visual.x * cellSize;
             const py = gameState.current.visual.y * cellSize;
-
             ctx.fillStyle = '#ff0055';
             ctx.shadowColor = '#ff0055';
             ctx.shadowBlur = 15;
@@ -312,7 +224,7 @@ const MazeGame = () => {
             ctx.fill();
             ctx.shadowBlur = 0;
 
-            // H. Particles
+            // Particles
             if (status === "won") {
                 gameState.current.particles.forEach((p, i) => {
                     p.x += p.vx;
@@ -324,32 +236,24 @@ const MazeGame = () => {
                 });
                 gameState.current.particles = gameState.current.particles.filter(p => p.life > 0);
             }
-
             gameState.current.animationId = requestAnimationFrame(render);
         };
-
         render();
-
         return () => cancelAnimationFrame(gameState.current.animationId);
     }, [status]);
 
-    // 4. INPUT HANDLING
     useEffect(() => {
         const move = (dx, dy) => {
             if (status !== "playing") return;
-
             const { x, y } = gameState.current.player;
             const nx = x + dx;
             const ny = y + dy;
-
             if (gameState.current.maze[ny][nx] === 0) {
                 gameState.current.player = { x: nx, y: ny };
                 gameState.current.trail.push({ x: nx, y: ny });
                 setStats(prev => ({ ...prev, moves: prev.moves + 1 }));
-
                 if (nx === gameState.current.cols - 2 && ny === gameState.current.rows - 2) {
                     setStatus("won");
-                    // Explosion
                     const particles = [];
                     for(let i=0; i<50; i++) {
                         particles.push({
@@ -366,7 +270,6 @@ const MazeGame = () => {
                 }
             }
         };
-
         const handleKey = (e) => {
             if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(e.key)) {
                 e.preventDefault();
@@ -376,10 +279,8 @@ const MazeGame = () => {
                 if (e.key === "ArrowRight") move(1, 0);
             }
         };
-
         window.addEventListener("keydown", handleKey);
         gameState.current.move = move;
-
         return () => window.removeEventListener("keydown", handleKey);
     }, [status]);
 
@@ -393,38 +294,23 @@ const MazeGame = () => {
                         <span style={{marginLeft:'20px'}}>MOVES: {stats.moves}</span>
                     </div>
                 </div>
-
-                {/* UPDATED: CLASS alert-text ADDED */}
                 <div className="maze-wrapper">
-                    {/* OVERLAYS */}
                     {status === "idle" && (
                         <div className="maze-overlay">
-                            {/* CHANGED FROM glitch-text TO alert-text */}
-                            <h3 className="mono alert-text">MARKET UNCERTAINTY DETECTED</h3>
-                            <p className="mono small-text" style={{margin:'20px 0'}}>
-                                The market is shrouded in fog. <br/>Navigate the data streams to find clarity.
-                            </p>
-                            <button className="submit-btn mono" onClick={startGame}>INITIATE PROTOCOL</button>
+                            <h3 className="mono alert-text">MARKET UNCERTAINTY</h3>
+                            <p className="mono small-text" style={{margin:'20px 0'}}>The market is shrouded in fog. <br/>Find clarity.</p>
+                            <button className="submit-btn mono" onClick={startGame}>START SIMULATION</button>
                         </div>
                     )}
-
                     {status === "won" && (
                         <div className="maze-overlay glass">
                             <h3 className="mono" style={{color: '#00ff00'}}>GOAL ACHIEVED</h3>
-                            <p className="mono" style={{margin: '20px 0'}}>
-                                Optimization Complete.<br/>
-                                Performance: {stats.moves} moves in {stats.time}s.
-                            </p>
+                            <p className="mono" style={{margin: '20px 0'}}>Optimization Complete.<br/>Performance: {stats.moves} moves in {stats.time}s.</p>
                             <button className="submit-btn mono" onClick={startGame}>RE-RUN TEST</button>
                         </div>
                     )}
-
-                    {/* SCANLINE EFFECT */}
                     <div className="scanlines"></div>
-
                     <canvas ref={canvasRef} className="maze-canvas" />
-
-                    {/* MOBILE CONTROLS */}
                     <div className="mobile-controls mobile-only">
                         <div className="d-pad">
                             <button onPointerDown={() => gameState.current.move(0, -1)}>▲</button>
@@ -435,20 +321,16 @@ const MazeGame = () => {
                             <button onPointerDown={() => gameState.current.move(0, 1)}>▼</button>
                         </div>
                     </div>
-
-                    <p className="mono desktop-only" style={{marginTop:'20px', textAlign:'center', opacity:0.6}}>
-                        [ ARROW KEYS TO NAVIGATE DATA STREAMS ]
-                    </p>
+                    <p className="mono desktop-only" style={{marginTop:'20px', textAlign:'center', opacity:0.6}}>[ ARROW KEYS TO NAVIGATE ]</p>
                 </div>
             </RevealOnScroll>
         </section>
     );
 };
 
-// --- COMPONENT: SERVICES DECK (UNCHANGED) ---
+// --- COMPONENT: SERVICES DECK ---
 const ServicesDeck = () => {
     const [activeService, setActiveService] = useState(0);
-
     return (
         <section id="services" className="border-b">
             <RevealOnScroll>
@@ -460,11 +342,7 @@ const ServicesDeck = () => {
             <div className="deck-container desktop-only">
                 <div className="deck-menu border-r">
                     {servicesData.map((service, index) => (
-                        <div
-                            key={service.id}
-                            className={`deck-item ${activeService === index ? 'active' : ''}`}
-                            onMouseEnter={() => setActiveService(index)}
-                        >
+                        <div key={service.id} className={`deck-item ${activeService === index ? 'active' : ''}`} onMouseEnter={() => setActiveService(index)}>
                             <span className="mono deck-num">{service.id}</span>
                             <span className="deck-title">{service.title}</span>
                             <div className="deck-indicator">→</div>
@@ -480,16 +358,10 @@ const ServicesDeck = () => {
                         <h3 className="display-big-title">
                             {servicesData[activeService].title.split(" ")[0]}
                             <br />
-                            <span className="outline-text">
-                                {servicesData[activeService].title.split(" ").slice(1).join(" ")}
-                            </span>
+                            <span className="outline-text">{servicesData[activeService].title.split(" ").slice(1).join(" ")}</span>
                         </h3>
                         <p className="display-desc">{servicesData[activeService].desc}</p>
-                        <div className="display-tags">
-                            {servicesData[activeService].tags.map(tag => (
-                                <span key={tag} className="tag mono">{tag}</span>
-                            ))}
-                        </div>
+                        <div className="display-tags">{servicesData[activeService].tags.map(tag => (<span key={tag} className="tag mono">{tag}</span>))}</div>
                     </div>
                     <div className="bg-huge-num">{servicesData[activeService].id}</div>
                 </div>
@@ -500,11 +372,7 @@ const ServicesDeck = () => {
                         <div className="mono" style={{marginBottom: '10px', opacity:0.5}}>{service.id}</div>
                         <h3 style={{fontSize: '2rem', marginBottom: '15px'}}>{service.title}</h3>
                         <p style={{marginBottom: '20px', opacity: 0.8}}>{service.desc}</p>
-                        <div className="tag-container">
-                            {service.tags.map(tag => (
-                                <span key={tag} className="tag mono">{tag}</span>
-                            ))}
-                        </div>
+                        <div className="tag-container">{service.tags.map(tag => (<span key={tag} className="tag mono">{tag}</span>))}</div>
                     </div>
                 ))}
             </div>
@@ -512,7 +380,7 @@ const ServicesDeck = () => {
     );
 };
 
-// --- COMPONENT: FAQ SECTION (UNCHANGED) ---
+// --- COMPONENT: FAQ SECTION ---
 const FAQSection = () => {
     const [openIndex, setOpenIndex] = useState(null);
     const toggleFAQ = (index) => setOpenIndex(openIndex === index ? null : index);
@@ -521,27 +389,17 @@ const FAQSection = () => {
             <RevealOnScroll>
                 <div className="pad-x pad-y-sm border-b header-flex">
                     <h2>Inquiries</h2>
-                    <span className="mono">F.A.Q. PROTOCOL</span>
+                    <span className="mono">F.A.Q.</span>
                 </div>
             </RevealOnScroll>
             <div className="faq-container">
                 {faqData.map((item, index) => (
-                    <div
-                        key={index}
-                        className={`faq-item ${openIndex === index ? 'open' : ''}`}
-                        onClick={() => toggleFAQ(index)}
-                    >
+                    <div key={index} className={`faq-item ${openIndex === index ? 'open' : ''}`} onClick={() => toggleFAQ(index)}>
                         <div className="faq-question">
                             <span className="faq-q-text">{item.q}</span>
-                            <span className="faq-toggle mono">
-                                {openIndex === index ? '[-]' : '[+]'}
-                            </span>
+                            <span className="faq-toggle mono">{openIndex === index ? '[-]' : '[+]'}</span>
                         </div>
-                        <div className="faq-answer">
-                            <div className="faq-answer-inner">
-                                {item.a}
-                            </div>
-                        </div>
+                        <div className="faq-answer"><div className="faq-answer-inner">{item.a}</div></div>
                     </div>
                 ))}
             </div>
@@ -549,19 +407,73 @@ const FAQSection = () => {
     );
 };
 
+// --- NEW COMPONENT: LIQUID POPUP MENU ---
+const MenuPopup = ({ isOpen, onClose }) => {
+    // Only render if open to allow animation entry, handling mount in CSS usually preferred
+    // but for simplicity we toggle class in container
+
+    const links = [
+        { name: "Services", href: "#services", id: "01" },
+        { name: "Leadership", href: "#team", id: "02" },
+        { name: "Play Maze", href: "#explore-target", id: "03" },
+        { name: "FAQ", href: "#faq", id: "04" },
+    ];
+
+    return (
+        <div className={`menu-overlay ${isOpen ? 'open' : ''}`}>
+            {/* Backdrop click to close */}
+            <div className="menu-backdrop" onClick={onClose}></div>
+
+            <div className="menu-card">
+                <div className="menu-header mono">
+                    <span>Navigation</span>
+                    <button onClick={onClose} className="menu-close-btn">Close</button>
+                </div>
+
+                <div className="menu-links">
+                    {links.map((link) => (
+                        <a href={link.href} key={link.id} className="menu-link-item" onClick={onClose}>
+                            <span className="menu-link-num mono">{link.id}</span>
+                            <span className="menu-link-text">{link.name}</span>
+                        </a>
+                    ))}
+                    {/* Primary CTA */}
+                    <a href="#contact" className="menu-link-item highlight" onClick={onClose}>
+                        <span className="menu-link-num mono">>></span>
+                        <span className="menu-link-text">Start Project</span>
+                    </a>
+                </div>
+
+                <div className="menu-footer mono">
+                    <div className="menu-stat-row">
+                        <span>Hyderabad, IN</span>
+                        <span>Online</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
 
 // --- MAIN APP ---
-
 export default function App() {
     const [theme, setTheme] = useState('light');
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
     const dotRef = useRef(null);
     const outlineRef = useRef(null);
+
     const toggleTheme = () => setTheme((prev) => (prev === 'light' ? 'dark' : 'light'));
 
     useEffect(() => {
         if (theme === 'dark') document.body.classList.add('dark-mode');
         else document.body.classList.remove('dark-mode');
     }, [theme]);
+
+    useEffect(() => {
+        // Lock body scroll when menu is open
+        if (isMenuOpen) document.body.style.overflow = 'hidden';
+        else document.body.style.overflow = 'auto';
+    }, [isMenuOpen]);
 
     useEffect(() => {
         const moveCursor = (e) => {
@@ -594,6 +506,23 @@ export default function App() {
             <div ref={outlineRef} className="cursor-outline"></div>
             <div className="noise"></div>
 
+            {/* POPUP MENU */}
+            <MenuPopup isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
+
+            {/* MOBILE BOTTOM DOCK */}
+            <div className="mobile-dock mobile-only">
+                <button
+                    className={`dock-btn mono ${isMenuOpen ? 'active' : ''}`}
+                    onClick={() => setIsMenuOpen(!isMenuOpen)}
+                >
+                    {isMenuOpen ? 'Close' : 'Menu'}
+                </button>
+                <div className="dock-divider"></div>
+                <a href="#contact" className="dock-cta mono">
+                    <span className="status-dot"></span> Start
+                </a>
+            </div>
+
             <div className="container">
                 <nav className="nav-bar">
                     <div className="logo" onClick={() => window.scrollTo(0,0)} style={{cursor: 'pointer'}}>
@@ -601,12 +530,12 @@ export default function App() {
                         MarketMaze
                     </div>
                     <div className="nav-right">
-                        <div className="nav-links mono">
-                            <a href="#services">Services</a>
-                            <a href="#team">Team</a>
-                            <a href="#faq">FAQ</a>
+                        {/* REPLACED INLINE LINKS WITH MENU BUTTON ON DESKTOP */}
+                        <div className="desktop-only" style={{marginRight: '20px'}}>
+                            <button className="mono nav-menu-trigger" onClick={() => setIsMenuOpen(true)}>Menu</button>
                         </div>
-                        <a href="#contact" className="nav-cta mono">Contact</a>
+
+                        <a href="#contact" className="nav-cta mono desktop-only">Contact</a>
                         <button onClick={toggleTheme} className="theme-toggle" aria-label="Toggle Theme">
                             {theme === 'light' ? (
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
@@ -705,7 +634,7 @@ export default function App() {
                     </section>
                 </main>
 
-                <footer className="border-t pad-x footer-flex">
+                <footer className="border-t pad-x footer-flex" style={{marginBottom: '80px'}}>
                     <div className="footer-col">
                         <span className="mono" style={{fontWeight:'700'}}>MARKETMAZE LLP</span>
                         <p className="mono" style={{marginTop:'10px', fontSize:'0.7rem', opacity:'0.6'}}>Registered in India.<br/>All Rights Reserved.</p>
