@@ -427,7 +427,7 @@ const FAQSection = () => {
     );
 };
 
-// --- NEW COMPONENT: LIQUID POPUP MENU ---
+// --- COMPONENT: LIQUID POPUP MENU (SURPRISE EDITION) ---
 const MenuPopup = ({ isOpen, onClose }) => {
     const links = [
         { name: "Services", href: "#services", id: "01" },
@@ -441,25 +441,39 @@ const MenuPopup = ({ isOpen, onClose }) => {
             <div className="menu-backdrop" onClick={onClose}></div>
             <div className="menu-card">
                 <div className="menu-header mono">
-                    <span>Navigation</span>
-                    <button onClick={onClose} className="menu-close-btn">Close</button>
+                    <span>// SYSTEM NAVIGATION</span>
+                    <button onClick={onClose} className="menu-close-btn">ESC</button>
                 </div>
+
                 <div className="menu-links">
-                    {links.map((link) => (
-                        <a href={link.href} key={link.id} className="menu-link-item" onClick={onClose}>
-                            <span className="menu-link-num mono">{link.id}</span>
+                    {links.map((link, index) => (
+                        <a
+                            href={link.href}
+                            key={link.id}
+                            className="menu-link-item"
+                            onClick={onClose}
+                            style={{ transitionDelay: `${index * 0.1}s` }}
+                        >
                             <span className="menu-link-text">{link.name}</span>
+                            <span className="menu-dots desktop-only-hide"></span>
+                            <span className="menu-link-num mono">{link.id}</span>
                         </a>
                     ))}
-                    <a href="#contact" className="menu-link-item highlight" onClick={onClose}>
-                        <span className="menu-link-num mono">>></span>
-                        <span className="menu-link-text">Start Project</span>
+
+                    <a
+                        href="#contact"
+                        className="menu-link-item highlight"
+                        onClick={onClose}
+                        style={{ transitionDelay: `${links.length * 0.1}s` }}
+                    >
+                        <span className="menu-link-text">INITIATE PROJECT -></span>
                     </a>
                 </div>
+
                 <div className="menu-footer mono">
                     <div className="menu-stat-row">
-                        <span>Hyderabad, IN</span>
-                        <span>Online</span>
+                        <span>STATUS: ONLINE</span>
+                        <span>V.2.0.4</span>
                     </div>
                 </div>
             </div>
