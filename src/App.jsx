@@ -560,7 +560,6 @@ export default function App() {
                         <RevealOnScroll>
                             <div className="hero-meta mono">
                                 <span style={{color: 'var(--ink)', fontWeight: 'bold'}}><LiveClock /></span>
-                                <span>AGENCY FIRM</span>
                             </div>
                             <h1 className="hero-title">
                                 navigate the Market<br/>
