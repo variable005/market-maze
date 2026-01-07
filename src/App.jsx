@@ -77,7 +77,8 @@ const LiveClock = () => {
         const timer = setInterval(() => setTime(new Date()), 1000);
         return () => clearInterval(timer);
     }, []);
-    return <span>{time.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' })} IST</span>;
+    // Added 'second: 2-digit' to the options below
+    return <span>{time.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' })} IST</span>;
 };
 
 const BenefitBox = ({ icon, title, text }) => (
