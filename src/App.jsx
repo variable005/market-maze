@@ -77,7 +77,6 @@ const LiveClock = () => {
         const timer = setInterval(() => setTime(new Date()), 1000);
         return () => clearInterval(timer);
     }, []);
-    // Added 'second: 2-digit' to the options below
     return <span>{time.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' })} IST</span>;
 };
 
@@ -298,9 +297,14 @@ const MazeGame = () => {
                 <div className="maze-wrapper">
                     {status === "idle" && (
                         <div className="maze-overlay">
-                            <h3 className="mono alert-text">MARKET UNCERTAINTY</h3>
-                            <p className="mono small-text" style={{margin:'20px 0'}}>The market is shrouded in fog. <br/>Find clarity.</p>
-                            <button className="submit-btn mono" onClick={startGame}>START SIMULATION</button>
+                            <h3 className="mono alert-text" style={{marginBottom: '1rem'}}>MARKET UNCERTAINTY</h3>
+                            <p className="mono" style={{marginBottom:'2rem', opacity: 0.8, lineHeight: '1.6'}}>
+                                THE MARKET IS SHROUDED IN FOG.<br/>
+                                FIND CLARITY.
+                            </p>
+                            <button className="submit-btn mono" onClick={startGame}>
+                                START SIMULATION
+                            </button>
                         </div>
                     )}
                     {status === "won" && (
