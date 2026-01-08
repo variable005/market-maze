@@ -88,7 +88,7 @@ const BenefitBox = ({ icon, title, text }) => (
     </div>
 );
 
-// --- COMPONENT: MAZE GAME ---
+// --- COMPONENT: MAZE GAME (UPDATED WITH HAPTICS) ---
 const MazeGame = () => {
     const canvasRef = useRef(null);
     const containerRef = useRef(null);
@@ -146,6 +146,26 @@ const MazeGame = () => {
         setStats({ moves: 0, time: 0 });
         setStatus("playing");
         window.focus();
+    };
+
+    // --- HAPTIC HELPER ---
+    const triggerHaptic = (type) => {
+        // navigator.vibrate is standard for Android. iOS does not support it in Safari web.
+        if (typeof navigator !== "undefined" && navigator.vibrate) {
+            switch (type) {
+                case 'move':
+                    navigator.vibrate(10); // 10ms tick for movement
+                    break;
+                case 'wall':
+                    navigator.vibrate(30); // 30ms thud for hitting wall
+                    break;
+                case 'win':
+                    navigator.vibrate([100, 50, 100, 50, 200]); // Victory pattern
+                    break;
+                default:
+                    break;
+            }
+        }
     };
 
     useEffect(() => {
@@ -252,8 +272,16 @@ const MazeGame = () => {
                 gameState.current.player = { x: nx, y: ny };
                 gameState.current.trail.push({ x: nx, y: ny });
                 setStats(prev => ({ ...prev, moves: prev.moves + 1 }));
+
+                // --- TRIGGER HAPTIC FOR MOVE ---
+                triggerHaptic('move');
+
                 if (nx === gameState.current.cols - 2 && ny === gameState.current.rows - 2) {
                     setStatus("won");
+
+                    // --- TRIGGER HAPTIC FOR WIN ---
+                    triggerHaptic('win');
+
                     const particles = [];
                     for(let i=0; i<50; i++) {
                         particles.push({
@@ -268,6 +296,9 @@ const MazeGame = () => {
                     }
                     gameState.current.particles = particles;
                 }
+            } else {
+                // --- TRIGGER HAPTIC FOR WALL HIT ---
+                triggerHaptic('wall');
             }
         };
         const handleKey = (e) => {
@@ -427,7 +458,7 @@ const FAQSection = () => {
     );
 };
 
-// --- COMPONENT: LIQUID POPUP MENU (SURPRISE EDITION) ---
+// --- COMPONENT: LIQUID POPUP MENU ---
 const MenuPopup = ({ isOpen, onClose }) => {
     const links = [
         { name: "Services", href: "#services", id: "01" },
@@ -556,7 +587,7 @@ export default function App() {
                     </div>
                     <div className="nav-right">
 
-                        {/* --- NEW DESKTOP NAVIGATION LINKS --- */}
+                        {/* --- DESKTOP NAVIGATION LINKS --- */}
                         <div className="desktop-only" style={{display: 'flex', gap: '30px', marginRight: '20px'}}>
                             <a href="#services" className="nav-link mono">Services</a>
                             <a href="#team" className="nav-link mono">Leadership</a>
