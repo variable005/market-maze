@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import "./App.css";
 
 // IMPORT YOUR LOGO
+// Make sure this path is correct in your project structure
 import marketMazeLogo from "./assets/marketmaze.svg";
 
 // --- DATA: SERVICES CONFIGURATION ---
@@ -88,11 +89,13 @@ const BenefitBox = ({ icon, title, text }) => (
     </div>
 );
 
-// --- COMPONENT: MAZE GAME (UPDATED WITH HAPTICS) ---
+// --- COMPONENT: MAZE GAME (UPDATED WITH SYNTH AUDIO & HAPTICS) ---
 const MazeGame = () => {
     const canvasRef = useRef(null);
     const containerRef = useRef(null);
+    const audioCtxRef = useRef(null); // Reference for Audio Context
     const [status, setStatus] = useState("idle");
+    const [isMuted, setIsMuted] = useState(false); // Mute toggle
     const [stats, setStats] = useState({ moves: 0, time: 0 });
 
     const gameState = useRef({
@@ -101,6 +104,72 @@ const MazeGame = () => {
         trail: [], particles: [], startTime: 0,
         animationId: null, visibilityRadius: 5
     });
+
+    // --- AUDIO SYSTEM (Web Audio API - No external files) ---
+    const initAudio = () => {
+        if (!audioCtxRef.current) {
+            // Create AudioContext only on user interaction to comply with browser policies
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            audioCtxRef.current = new AudioContext();
+        }
+        if (audioCtxRef.current.state === 'suspended') {
+            audioCtxRef.current.resume();
+        }
+    };
+
+    const playSynthSound = (type) => {
+        if (isMuted || !audioCtxRef.current) return;
+
+        const ctx = audioCtxRef.current;
+        const osc = ctx.createOscillator();
+        const gainNode = ctx.createGain();
+
+        osc.connect(gainNode);
+        gainNode.connect(ctx.destination);
+
+        const now = ctx.currentTime;
+
+        if (type === 'move') {
+            // High tech "Blip"
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(800, now);
+            osc.frequency.exponentialRampToValueAtTime(300, now + 0.1);
+            gainNode.gain.setValueAtTime(0.05, now);
+            gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+            osc.start(now);
+            osc.stop(now + 0.1);
+        }
+        else if (type === 'wall') {
+            // Low "Buzz/Error"
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(150, now);
+            osc.frequency.linearRampToValueAtTime(100, now + 0.1);
+            gainNode.gain.setValueAtTime(0.05, now);
+            gainNode.gain.linearRampToValueAtTime(0.001, now + 0.1);
+            osc.start(now);
+            osc.stop(now + 0.1);
+        }
+        else if (type === 'win') {
+            // Victory Arpeggio
+            const playNote = (freq, time, duration) => {
+                const o = ctx.createOscillator();
+                const g = ctx.createGain();
+                o.connect(g);
+                g.connect(ctx.destination);
+                o.type = 'square'; // Retro game sound
+                o.frequency.value = freq;
+                g.gain.setValueAtTime(0.05, time);
+                g.gain.linearRampToValueAtTime(0, time + duration);
+                o.start(time);
+                o.stop(time + duration);
+            };
+
+            playNote(523.25, now, 0.1);       // C5
+            playNote(659.25, now + 0.1, 0.1); // E5
+            playNote(783.99, now + 0.2, 0.1); // G5
+            playNote(1046.50, now + 0.3, 0.4);// C6
+        }
+    };
 
     const generateMaze = useCallback(() => {
         const { cols, rows } = gameState.current;
@@ -134,6 +203,10 @@ const MazeGame = () => {
 
     const startGame = () => {
         if (!containerRef.current) return;
+
+        // Initialize Audio on user interaction (Click)
+        initAudio();
+
         const w = containerRef.current.offsetWidth;
         const maxW = Math.min(w, 600);
         gameState.current.cellSize = Math.floor(maxW / gameState.current.cols);
@@ -145,25 +218,23 @@ const MazeGame = () => {
         gameState.current.startTime = Date.now();
         setStats({ moves: 0, time: 0 });
         setStatus("playing");
+
+        // Play start blip
+        if(!isMuted && audioCtxRef.current) {
+            playSynthSound('move');
+        }
+
         window.focus();
     };
 
     // --- HAPTIC HELPER ---
     const triggerHaptic = (type) => {
-        // navigator.vibrate is standard for Android. iOS does not support it in Safari web.
         if (typeof navigator !== "undefined" && navigator.vibrate) {
             switch (type) {
-                case 'move':
-                    navigator.vibrate(10); // 10ms tick for movement
-                    break;
-                case 'wall':
-                    navigator.vibrate(30); // 30ms thud for hitting wall
-                    break;
-                case 'win':
-                    navigator.vibrate([100, 50, 100, 50, 200]); // Victory pattern
-                    break;
-                default:
-                    break;
+                case 'move': navigator.vibrate(10); break;
+                case 'wall': navigator.vibrate(30); break;
+                case 'win': navigator.vibrate([100, 50, 100, 50, 200]); break;
+                default: break;
             }
         }
     };
@@ -265,6 +336,12 @@ const MazeGame = () => {
     useEffect(() => {
         const move = (dx, dy) => {
             if (status !== "playing") return;
+
+            // Resume context if suspended
+            if (audioCtxRef.current && audioCtxRef.current.state === 'suspended') {
+                audioCtxRef.current.resume();
+            }
+
             const { x, y } = gameState.current.player;
             const nx = x + dx;
             const ny = y + dy;
@@ -273,14 +350,13 @@ const MazeGame = () => {
                 gameState.current.trail.push({ x: nx, y: ny });
                 setStats(prev => ({ ...prev, moves: prev.moves + 1 }));
 
-                // --- TRIGGER HAPTIC FOR MOVE ---
                 triggerHaptic('move');
+                playSynthSound('move'); // SOUND
 
                 if (nx === gameState.current.cols - 2 && ny === gameState.current.rows - 2) {
                     setStatus("won");
-
-                    // --- TRIGGER HAPTIC FOR WIN ---
                     triggerHaptic('win');
+                    playSynthSound('win'); // SOUND
 
                     const particles = [];
                     for(let i=0; i<50; i++) {
@@ -297,8 +373,8 @@ const MazeGame = () => {
                     gameState.current.particles = particles;
                 }
             } else {
-                // --- TRIGGER HAPTIC FOR WALL HIT ---
                 triggerHaptic('wall');
+                playSynthSound('wall'); // SOUND
             }
         };
         const handleKey = (e) => {
@@ -313,16 +389,24 @@ const MazeGame = () => {
         window.addEventListener("keydown", handleKey);
         gameState.current.move = move;
         return () => window.removeEventListener("keydown", handleKey);
-    }, [status]);
+    }, [status, isMuted]);
 
     return (
         <section className="maze-section border-b pad-x pad-y" ref={containerRef}>
             <RevealOnScroll>
                 <div className="header-flex" style={{marginBottom: '40px'}}>
                     <h2>Master The Maze</h2>
-                    <div className="maze-stats mono">
+                    <div className="maze-stats mono" style={{display:'flex', alignItems:'center', gap:'20px'}}>
+                        <button
+                            onClick={() => setIsMuted(!isMuted)}
+                            className="mono"
+                            style={{background:'none', border:'none', cursor:'pointer', opacity:0.7, fontSize:'0.9rem'}}
+                        >
+                            {isMuted ? '[ SOUND: OFF ]' : '[ SOUND: ON ]'}
+                        </button>
+                        <div style={{width:'1px', height:'15px', background:'var(--ink)', opacity:0.3}}></div>
                         <span>T: {stats.time}s</span>
-                        <span style={{marginLeft:'20px'}}>MOVES: {stats.moves}</span>
+                        <span style={{marginLeft:'5px'}}>MOVES: {stats.moves}</span>
                     </div>
                 </div>
                 <div className="maze-wrapper">
