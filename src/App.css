@@ -153,11 +153,85 @@ body.dark-mode .nav-logo-img { filter: invert(1) brightness(2); }
 .bg-huge-num { position: absolute; bottom: -50px; right: -20px; font-size: 20rem; font-family: var(--font-display); font-weight: 800; color: var(--ink); opacity: 0.03; z-index: 0; pointer-events: none; line-height: 1; }
 body.dark-mode .deck-item:hover, body.dark-mode .deck-item.active { background: var(--ink); color: var(--bg); }
 
-/* --- LEADERSHIP --- */
+/* --- LEADERSHIP (CREATIVE UPDATE) --- */
 .founders-grid { display: grid; grid-template-columns: repeat(4, 1fr); border-bottom: 1px solid var(--ink); }
-.founder-col { padding: 60px 4vw; border-right: 1px solid var(--ink); display: flex; flex-direction: column; transition: border-color 0.3s; }
+.founder-col {
+    padding: 60px 2vw;
+    border-right: 1px solid var(--ink);
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center content */
+    text-align: center;
+    transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+    position: relative;
+    overflow: hidden;
+    min-height: 400px; /* Taller for effect */
+    justify-content: center;
+}
 .founder-col:last-child { border-right: none; }
-.founder-role { display: inline-block; padding: 5px 10px; border: 1px solid var(--ink); border-radius: 20px; margin-bottom: 20px; font-size: 0.7rem; background: var(--ink); color: var(--bg); width: fit-content; transition: background 0.3s, color 0.3s; }
+.founder-role {
+    display: inline-block;
+    padding: 5px 12px;
+    border: 1px solid var(--ink);
+    border-radius: 20px;
+    margin-bottom: 25px;
+    font-size: 0.65rem;
+    background: transparent;
+    color: var(--ink);
+    transition: all 0.3s;
+    letter-spacing: 0.1em;
+}
+.founder-name {
+    font-size: 1.5rem;
+    line-height: 1.2;
+    margin-bottom: 40px;
+    z-index: 2;
+    transition: transform 0.4s ease;
+}
+
+/* Connect Button Styling */
+.connect-btn {
+    position: absolute;
+    bottom: -60px; /* Hidden initially */
+    opacity: 0;
+    text-decoration: none;
+    font-family: var(--font-tech);
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--bg);
+    background: var(--ink);
+    padding: 12px 24px;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    border: 1px solid var(--ink); /* Matching border for hover flip */
+}
+
+/* Hover Effects on Founder Card */
+.founder-col:hover {
+    background: var(--ink);
+}
+.founder-col:hover .founder-role {
+    background: var(--bg);
+    color: var(--ink);
+    border-color: var(--bg);
+}
+.founder-col:hover .founder-name {
+    color: var(--bg);
+    transform: translateY(-20px);
+}
+.founder-col:hover .connect-btn {
+    bottom: 50px;
+    opacity: 1;
+    background: var(--bg);
+    color: var(--ink);
+}
+.connect-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 20px rgba(255,255,255,0.3);
+}
 
 /* --- FAQ SECTION --- */
 .faq-container { display: flex; flex-direction: column; }
@@ -258,7 +332,27 @@ body.dark-mode .maze-overlay { background: var(--glass-bg); }
     .hero-title { font-size: clamp(1.8rem, 7vw, 2.5rem); word-break: normal; overflow-wrap: break-word; text-align: left; }
     .hero-footer { align-items: flex-start; text-align: left; margin-top: 30px; gap: 30px; flex-direction: column; }
     .hero-sub { text-align: left; margin: 0; }
-    .founder-col, .benefit-box { border-right: none !important; border-bottom: 1px solid var(--ink); padding: 40px 24px; background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(5px); }
+    .founder-col, .benefit-box {
+        border-right: none !important;
+        border-bottom: 1px solid var(--ink);
+        padding: 40px 24px;
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(5px);
+        min-height: auto; /* Reset for mobile */
+    }
+
+    /* Mobile Leadership Tweaks */
+    .founder-col .connect-btn {
+        position: relative;
+        bottom: auto;
+        opacity: 1;
+        margin-top: 20px;
+        background: transparent;
+        color: var(--ink);
+        border: 1px solid var(--ink);
+    }
+    .founder-col:hover .founder-name { transform: none; }
+
     .founder-col:last-child { border-bottom: none; }
     .nav-bar { position: fixed; top: 15px; left: 50%; transform: translateX(-50%); width: calc(100% - 32px); padding: 10px 16px; justify-content: space-between; }
     .nav-logo-img { height: 20px; width: auto; }

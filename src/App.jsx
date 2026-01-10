@@ -45,6 +45,30 @@ const servicesData = [
     }
 ];
 
+// --- DATA: LEADERSHIP TEAM ---
+const leadershipData = [
+    {
+        name: "Abhiram Rentala",
+        role: "EXECUTIVE PARTNER",
+        linkedin: "https://www.linkedin.com/in/abhiram-rentala-11ab0a1a7?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app"
+    },
+    {
+        name: "Sasidhar Bezawada",
+        role: "MANAGING PARTNER",
+        linkedin: "https://www.linkedin.com/in/b-sasidhar-b02b56252?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app"
+    },
+    {
+        name: "Aman Gyani",
+        role: "DESIGNATED PARTNER",
+        linkedin: "https://www.linkedin.com/in/aman-gyani-7495421a7?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app"
+    },
+    {
+        name: "Kalyan Mourya",
+        role: "EXECUTIVE MANAGER",
+        linkedin: "https://www.linkedin.com/in/kalyan-mourya-ab7780261/"
+    }
+];
+
 // --- DATA: FAQ ---
 const faqData = [
     { q: "What industries do you specialize in?", a: "We are industry-agnostic but have deep expertise in Manufacturing, Logistics, FMCG, and Tech Startups." },
@@ -734,10 +758,20 @@ export default function App() {
                             <div className="pad-x pad-y border-b"><h2>Leadership</h2></div>
                         </RevealOnScroll>
                         <div className="founders-grid">
-                            <div className="founder-col"><span className="founder-role mono">EXECUTIVE PARTNER</span><h3 className="founder-name">Abhiram Rentala</h3></div>
-                            <div className="founder-col"><span className="founder-role mono">MANAGING PARTNER</span><h3 className="founder-name">Sasidhar Bezawada</h3></div>
-                            <div className="founder-col"><span className="founder-role mono">DESIGNATED PARTNER</span><h3 className="founder-name">Aman Gyani</h3></div>
-                            <div className="founder-col"><span className="founder-role mono">EXECUTIVE MANAGER</span><h3 className="founder-name">Kalyan Mourya</h3></div>
+                            {leadershipData.map((leader, index) => (
+                                <div className="founder-col" key={index}>
+                                    <span className="founder-role mono">{leader.role}</span>
+                                    <h3 className="founder-name">{leader.name}</h3>
+                                    <a
+                                        href={leader.linkedin}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="connect-btn"
+                                    >
+                                        CONNECT <span>↗</span>
+                                    </a>
+                                </div>
+                            ))}
                         </div>
                     </section>
 
