@@ -418,19 +418,33 @@ const MazeGame = () => {
     return (
         <section className="maze-section border-b pad-x pad-y" ref={containerRef}>
             <RevealOnScroll>
-                <div className="header-flex" style={{marginBottom: '40px'}}>
-                    <h2>Master The Maze</h2>
-                    <div className="maze-stats mono" style={{display:'flex', alignItems:'center', gap:'20px'}}>
+                {/* FIX APPLIED HERE:
+                   1. Added flexWrap: 'wrap' to parent to allow stats to drop below title on mobile.
+                   2. Added gap: '1rem' to parent for spacing when wrapped.
+                   3. Stats container: Reduced gap to 12px, font size to 0.85rem, and removed margin from items to ensure mobile fit.
+                */}
+                <div className="header-flex" style={{marginBottom: '40px', flexWrap: 'wrap', gap: '1rem', alignItems: 'center'}}>
+                    <h2 style={{marginRight: 'auto'}}>Master The Maze</h2>
+                    <div className="maze-stats mono" style={{display:'flex', alignItems:'center', gap:'12px', fontSize: '0.85rem'}}>
                         <button
                             onClick={() => setIsMuted(!isMuted)}
                             className="mono"
-                            style={{background:'none', border:'none', cursor:'pointer', opacity:0.7, fontSize:'0.9rem'}}
+                            style={{
+                                background:'none',
+                                border:'none',
+                                cursor:'pointer',
+                                opacity:0.7,
+                                fontSize:'0.9rem',
+                                padding: 0, // Removed padding to align with text
+                                display: 'flex',
+                                alignItems: 'center'
+                            }}
                         >
                             {isMuted ? '[ SOUND: OFF ]' : '[ SOUND: ON ]'}
                         </button>
-                        <div style={{width:'1px', height:'15px', background:'var(--ink)', opacity:0.3}}></div>
+                        <div style={{width:'1px', height:'12px', background:'var(--ink)', opacity:0.3}}></div>
                         <span>T: {stats.time}s</span>
-                        <span style={{marginLeft:'5px'}}>MOVES: {stats.moves}</span>
+                        <span>MOVES: {stats.moves}</span>
                     </div>
                 </div>
                 <div className="maze-wrapper">
