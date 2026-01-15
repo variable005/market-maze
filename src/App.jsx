@@ -735,7 +735,7 @@ export default function App() {
                             </div>
                             <h1 className="hero-title">
                                 navigate the Market<br/>
-                                <span className="outline-text">master the maze</span>
+                                <span className="outline-text">Master the Maze</span>
                             </h1>
                             <div className="hero-footer">
                                 <p className="hero-sub">We are the strategic partner for ambitious founders. Turning uncertainty into measurable leverage.</p>
