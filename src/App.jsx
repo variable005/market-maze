@@ -61,11 +61,6 @@ const leadershipData = [
         name: "Aman Gyani",
         role: "DESIGNATED PARTNER",
         linkedin: "https://www.linkedin.com/in/aman-gyani-7495421a7?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app"
-    },
-    {
-        name: "Kalyan Mourya",
-        role: "EXECUTIVE MANAGER",
-        linkedin: "https://www.linkedin.com/in/kalyan-mourya-ab7780261/"
     }
 ];
 

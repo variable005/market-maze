@@ -154,7 +154,8 @@ body.dark-mode .nav-logo-img { filter: invert(1) brightness(2); }
 body.dark-mode .deck-item:hover, body.dark-mode .deck-item.active { background: var(--ink); color: var(--bg); }
 
 /* --- LEADERSHIP (CREATIVE UPDATE) --- */
-.founders-grid { display: grid; grid-template-columns: repeat(4, 1fr); border-bottom: 1px solid var(--ink); }
+/* UPDATED: Changed from repeat(4, 1fr) to repeat(3, 1fr) */
+.founders-grid { display: grid; grid-template-columns: repeat(3, 1fr); border-bottom: 1px solid var(--ink); }
 .founder-col {
     padding: 60px 2vw;
     border-right: 1px solid var(--ink);
