@@ -102,7 +102,7 @@ const LiveClock = () => {
 
 const BenefitBox = ({ icon, title, text }) => (
     <div className="benefit-box border-r border-b">
-        <div className="mono" style={{marginBottom: '20px', fontSize: '1.2rem'}}>{icon}</div>
+        <div className="mono" style={{ marginBottom: '20px', fontSize: '1.2rem' }}>{icon}</div>
         <h3 className="benefit-title">{title}</h3>
         <p className="benefit-text">{text}</p>
     </div>
@@ -239,7 +239,7 @@ const MazeGame = () => {
         setStatus("playing");
 
         // Play start blip
-        if(!isMuted && audioCtxRef.current) {
+        if (!isMuted && audioCtxRef.current) {
             playSynthSound('move');
         }
 
@@ -330,7 +330,7 @@ const MazeGame = () => {
             ctx.shadowColor = '#ff0055';
             ctx.shadowBlur = 15;
             ctx.beginPath();
-            ctx.arc(px + cellSize/2, py + cellSize/2, cellSize * 0.3, 0, Math.PI * 2);
+            ctx.arc(px + cellSize / 2, py + cellSize / 2, cellSize * 0.3, 0, Math.PI * 2);
             ctx.fill();
             ctx.shadowBlur = 0;
 
@@ -378,10 +378,10 @@ const MazeGame = () => {
                     playSynthSound('win'); // SOUND
 
                     const particles = [];
-                    for(let i=0; i<50; i++) {
+                    for (let i = 0; i < 50; i++) {
                         particles.push({
-                            x: nx * gameState.current.cellSize + gameState.current.cellSize/2,
-                            y: ny * gameState.current.cellSize + gameState.current.cellSize/2,
+                            x: nx * gameState.current.cellSize + gameState.current.cellSize / 2,
+                            y: ny * gameState.current.cellSize + gameState.current.cellSize / 2,
                             vx: (Math.random() - 0.5) * 10,
                             vy: (Math.random() - 0.5) * 10,
                             life: 1.0,
@@ -418,18 +418,18 @@ const MazeGame = () => {
                    2. Added gap: '1rem' to parent for spacing when wrapped.
                    3. Stats container: Reduced gap to 12px, font size to 0.85rem, and removed margin from items to ensure mobile fit.
                 */}
-                <div className="header-flex" style={{marginBottom: '40px', flexWrap: 'wrap', gap: '1rem', alignItems: 'center'}}>
-                    <h2 style={{marginRight: 'auto'}}>Master The Maze</h2>
-                    <div className="maze-stats mono" style={{display:'flex', alignItems:'center', gap:'12px', fontSize: '0.85rem'}}>
+                <div className="header-flex" style={{ marginBottom: '40px', flexWrap: 'wrap', gap: '1rem', alignItems: 'center' }}>
+                    <h2 style={{ marginRight: 'auto' }}>Master The Maze</h2>
+                    <div className="maze-stats mono" style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '0.85rem' }}>
                         <button
                             onClick={() => setIsMuted(!isMuted)}
                             className="mono"
                             style={{
-                                background:'none',
-                                border:'none',
-                                cursor:'pointer',
-                                opacity:0.7,
-                                fontSize:'0.9rem',
+                                background: 'none',
+                                border: 'none',
+                                cursor: 'pointer',
+                                opacity: 0.7,
+                                fontSize: '0.9rem',
                                 padding: 0, // Removed padding to align with text
                                 display: 'flex',
                                 alignItems: 'center'
@@ -437,7 +437,7 @@ const MazeGame = () => {
                         >
                             {isMuted ? '[ SOUND: OFF ]' : '[ SOUND: ON ]'}
                         </button>
-                        <div style={{width:'1px', height:'12px', background:'var(--ink)', opacity:0.3}}></div>
+                        <div style={{ width: '1px', height: '12px', background: 'var(--ink)', opacity: 0.3 }}></div>
                         <span>T: {stats.time}s</span>
                         <span>MOVES: {stats.moves}</span>
                     </div>
@@ -445,9 +445,9 @@ const MazeGame = () => {
                 <div className="maze-wrapper">
                     {status === "idle" && (
                         <div className="maze-overlay">
-                            <h3 className="mono alert-text" style={{marginBottom: '1rem'}}>MARKET UNCERTAINTY</h3>
-                            <p className="mono" style={{marginBottom:'2rem', opacity: 0.8, lineHeight: '1.6'}}>
-                                THE MARKET IS SHROUDED IN FOG.<br/>
+                            <h3 className="mono alert-text" style={{ marginBottom: '1rem' }}>MARKET UNCERTAINTY</h3>
+                            <p className="mono" style={{ marginBottom: '2rem', opacity: 0.8, lineHeight: '1.6' }}>
+                                THE MARKET IS SHROUDED IN FOG.<br />
                                 FIND CLARITY.
                             </p>
                             <button className="submit-btn mono" onClick={startGame}>
@@ -457,8 +457,8 @@ const MazeGame = () => {
                     )}
                     {status === "won" && (
                         <div className="maze-overlay glass">
-                            <h3 className="mono" style={{color: '#00ff00'}}>GOAL ACHIEVED</h3>
-                            <p className="mono" style={{margin: '20px 0'}}>Optimization Complete.<br/>Performance: {stats.moves} moves in {stats.time}s.</p>
+                            <h3 className="mono" style={{ color: '#00ff00' }}>GOAL ACHIEVED</h3>
+                            <p className="mono" style={{ margin: '20px 0' }}>Optimization Complete.<br />Performance: {stats.moves} moves in {stats.time}s.</p>
                             <button className="submit-btn mono" onClick={startGame}>RE-RUN TEST</button>
                         </div>
                     )}
@@ -474,7 +474,7 @@ const MazeGame = () => {
                             <button onPointerDown={() => gameState.current.move(0, 1)}>▼</button>
                         </div>
                     </div>
-                    <p className="mono desktop-only" style={{marginTop:'20px', textAlign:'center', opacity:0.6}}>[ ARROW KEYS TO NAVIGATE ]</p>
+                    <p className="mono desktop-only" style={{ marginTop: '20px', textAlign: 'center', opacity: 0.6 }}>[ ARROW KEYS TO NAVIGATE ]</p>
                 </div>
             </RevealOnScroll>
         </section>
@@ -524,7 +524,7 @@ const ServicesDeck = () => {
 
             {/* MOBILE VIEW - OPTIMIZED HORIZONTAL CAROUSEL */}
             <div className="mobile-services-container mobile-only">
-                <p className="mono swipe-hint text-center opacity-50" style={{marginBottom: '30px', textAlign: 'center'}}>&lt;&lt; SWIPE TO EXPLORE &gt;&gt;</p>
+                <p className="mono swipe-hint text-center opacity-50" style={{ marginBottom: '30px', textAlign: 'center' }}>&lt;&lt; SWIPE TO EXPLORE &gt;&gt;</p>
 
                 <div className="mobile-carousel">
                     {servicesData.map((service) => (
@@ -541,7 +541,7 @@ const ServicesDeck = () => {
                         </div>
                     ))}
                     {/* SPACER FOR END OF SCROLL */}
-                    <div style={{minWidth: '20px'}}></div>
+                    <div style={{ minWidth: '20px' }}></div>
                 </div>
             </div>
         </section>
@@ -649,22 +649,56 @@ export default function App() {
     }, [isMenuOpen]);
 
     useEffect(() => {
+        // Track the actual mouse position
+        let mouseX = window.innerWidth / 2;
+        let mouseY = window.innerHeight / 2;
+
+        // Track the interpolated positions for dot and outline
+        let outlineX = window.innerWidth / 2;
+        let outlineY = window.innerHeight / 2;
+        let dotX = window.innerWidth / 2;
+        let dotY = window.innerHeight / 2;
+
+        // Animation frame reference
+        let animationFrameId;
+
         const moveCursor = (e) => {
-            const { clientX, clientY } = e;
-            if (dotRef.current && outlineRef.current) {
-                dotRef.current.style.transform = `translate(${clientX}px, ${clientY}px)`;
-                outlineRef.current.style.transform = `translate(${clientX}px, ${clientY}px)`;
-            }
+            mouseX = e.clientX;
+            mouseY = e.clientY;
         };
+
+        const animate = () => {
+            // Instant tracking for the dot (with tiny interpolation for supreme smoothness)
+            dotX += (mouseX - dotX) * 0.8;
+            dotY += (mouseY - dotY) * 0.8;
+
+            // Smoother trailing interpolation for the outline
+            outlineX += (mouseX - outlineX) * 0.15;
+            outlineY += (mouseY - outlineY) * 0.15;
+
+            if (dotRef.current && outlineRef.current) {
+                dotRef.current.style.transform = `translate(${dotX}px, ${dotY}px)`;
+                outlineRef.current.style.transform = `translate(${outlineX}px, ${outlineY}px)`;
+            }
+
+            animationFrameId = requestAnimationFrame(animate);
+        };
+
         const handleInteraction = () => document.body.classList.add("cursor-active");
         const handleReset = () => document.body.classList.remove("cursor-active");
+
         window.addEventListener("mousemove", moveCursor);
         window.addEventListener("mousedown", handleInteraction);
         window.addEventListener("mouseup", handleReset);
+
+        // Start loop
+        animate();
+
         return () => {
             window.removeEventListener("mousemove", moveCursor);
             window.removeEventListener("mousedown", handleInteraction);
             window.removeEventListener("mouseup", handleReset);
+            cancelAnimationFrame(animationFrameId);
         };
     }, []);
 
@@ -698,14 +732,14 @@ export default function App() {
 
             <div className="container">
                 <nav className="nav-bar">
-                    <div className="logo" onClick={() => window.scrollTo(0,0)} style={{cursor: 'pointer'}}>
+                    <div className="logo" onClick={() => window.scrollTo(0, 0)} style={{ cursor: 'pointer' }}>
                         <img src={marketMazeLogo} alt="MarketMaze" className="nav-logo-img" />
                         MarketMaze
                     </div>
                     <div className="nav-right">
 
                         {/* --- DESKTOP NAVIGATION LINKS --- */}
-                        <div className="desktop-only" style={{display: 'flex', gap: '30px', marginRight: '20px'}}>
+                        <div className="desktop-only" style={{ display: 'flex', gap: '30px', marginRight: '20px' }}>
                             <a href="#services" className="nav-link mono">Services</a>
                             <a href="#team" className="nav-link mono">Leadership</a>
                             <a href="#explore-target" className="nav-link mono">Play</a>
@@ -726,10 +760,10 @@ export default function App() {
                     <header className="hero-section pad-x border-b">
                         <RevealOnScroll>
                             <div className="hero-meta mono">
-                                <span style={{color: 'var(--ink)', fontWeight: 'bold'}}><LiveClock /></span>
+                                <span style={{ color: 'var(--ink)', fontWeight: 'bold' }}><LiveClock /></span>
                             </div>
                             <h1 className="hero-title">
-                                navigate the Market<br/>
+                                navigate the Market<br />
                                 <span className="outline-text">Master the Maze</span>
                             </h1>
                             <div className="hero-footer">
@@ -792,8 +826,8 @@ export default function App() {
                         <RevealOnScroll>
                             <div className="contact-layout">
                                 <div>
-                                    <h2 style={{ lineHeight: '0.9' }}>Start<br/>The<br/>Work.</h2>
-                                    <p className="mono contact-details">HYDERABAD HQ<br/>+91 91771 06693<br/>BUSINESS@MARKETMAZE.IN</p>
+                                    <h2 style={{ lineHeight: '0.9' }}>Start<br />The<br />Work.</h2>
+                                    <p className="mono contact-details">HYDERABAD HQ<br />+91 91771 06693<br />BUSINESS@MARKETMAZE.IN</p>
                                 </div>
                                 <form
                                     className="contact-form"
@@ -811,7 +845,7 @@ export default function App() {
                                     <div><label className="mono input-label">01. Name</label><input type="text" name="name" className="big-input" placeholder="ENTER FULL NAME" required /></div>
                                     <div><label className="mono input-label">02. Email</label><input type="email" name="email" className="big-input" placeholder="ENTER EMAIL ADDRESS" required /></div>
                                     <div><label className="mono input-label">03. Phone Number</label><input type="tel" name="phone" className="big-input" placeholder="ENTER PHONE (OPTIONAL)" /></div>
-                                    <div><label className="mono input-label">04. Project Details</label><textarea name="message" className="big-input" placeholder="TELL US ABOUT YOUR GOALS..." rows="3" style={{resize: 'vertical', minHeight: '100px'}} required></textarea></div>
+                                    <div><label className="mono input-label">04. Project Details</label><textarea name="message" className="big-input" placeholder="TELL US ABOUT YOUR GOALS..." rows="3" style={{ resize: 'vertical', minHeight: '100px' }} required></textarea></div>
                                     <button type="submit" className="submit-btn mono">TRANSMIT PROPOSAL -></button>
                                 </form>
                             </div>
@@ -819,14 +853,14 @@ export default function App() {
                     </section>
                 </main>
 
-                <footer className="border-t pad-x footer-flex" style={{marginBottom: '80px'}}>
+                <footer className="border-t pad-x footer-flex" style={{ marginBottom: '80px' }}>
                     <div className="footer-col">
-                        <span className="mono" style={{fontWeight:'700'}}>MARKETMAZE LLP</span>
-                        <p className="mono" style={{marginTop:'10px', fontSize:'0.7rem', opacity:'0.6'}}>Registered in India.<br/>All Rights Reserved.</p>
+                        <span className="mono" style={{ fontWeight: '700' }}>MARKETMAZE LLP</span>
+                        <p className="mono" style={{ marginTop: '10px', fontSize: '0.7rem', opacity: '0.6' }}>Registered in India.<br />All Rights Reserved.</p>
                     </div>
                     <div className="footer-col">
                         <span className="mono">Socials</span>
-                        <div style={{marginTop:'10px', display:'flex', flexDirection:'column', gap:'5px'}}>
+                        <div style={{ marginTop: '10px', display: 'flex', flexDirection: 'column', gap: '5px' }}>
                             <a href="https://www.linkedin.com/company/106402840" target="_blank" rel="noopener noreferrer" className="mono footer-link">LinkedIn</a>
                             <a href="https://www.instagram.com/marketmazein/" target="_blank" rel="noopener noreferrer" className="mono footer-link">Instagram</a>
                         </div>
