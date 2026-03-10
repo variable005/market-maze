@@ -636,10 +636,70 @@ const MenuPopup = ({ isOpen, onClose }) => {
     );
 };
 
+// --- COMPONENT: PRELOADER (PATHFINDING MAZE) ---
+const Preloader = ({ onComplete }) => {
+    const [phase, setPhase] = useState("drawing"); // drawing, fade
+
+    useEffect(() => {
+        // Animation timing: 2.8s for path to draw, then fade out directly
+        const timer1 = setTimeout(() => {
+            setPhase("fade");
+            setTimeout(onComplete, 600); // Wait for fade out
+        }, 3000);
+
+        return () => clearTimeout(timer1);
+    }, [onComplete]);
+
+    // Generate a 10x10 grid (100 cells)
+    const gridSize = 10;
+    const gridItems = Array.from({ length: gridSize * gridSize }, (_, i) => i);
+
+    // Hardcode a stylized "solved path" weaving through the 10x10 block
+    // These indices light up sequentially
+    const solutionPath = [
+        0, 10, 20, 21, 22, 12, 2, 3, 4, 14, 24, 34, 35, 45, 55, 65, 64, 63,
+        73, 83, 84, 85, 86, 76, 66, 56, 46, 36, 37, 38, 48, 58, 68, 78, 88, 98, 99
+    ];
+
+    return (
+        <div className={`preloader-overlay ${phase === 'fade' ? 'fade-out' : ''}`}>
+            <div className="preloader-maze-container">
+                <div className="preloader-grid-10">
+                    {gridItems.map(i => {
+                        const isPath = solutionPath.includes(i);
+                        const pathIndex = solutionPath.indexOf(i);
+                        // Delay drawing based on position in the solved path
+                        const delay = isPath ? `${pathIndex * 0.05}s` : '0s';
+
+                        return (
+                            <div
+                                key={i}
+                                className={`preloader-cell-10 ${isPath ? 'is-path' : ''}`}
+                                style={{
+                                    animationDelay: delay,
+                                    // Add a slight random opacity to non-path walls to make it look like a complex maze
+                                    opacity: isPath ? 1 : 0.1 + Math.random() * 0.3
+                                }}
+                            >
+                                <div className="wall-top"></div>
+                                <div className="wall-left"></div>
+                            </div>
+                        );
+                    })}
+                </div>
+                <div className="preloader-text mono">NAVIGATING MAZE...</div>
+            </div>
+            <div className="scanlines"></div>
+            <div className="noise"></div>
+        </div>
+    );
+};
+
 // --- MAIN APP ---
 export default function App() {
     const [theme, setTheme] = useState('light');
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [isPreloading, setIsPreloading] = useState(true);
     const outlineRef = useRef(null);
 
     const toggleTheme = () => setTheme((prev) => (prev === 'light' ? 'dark' : 'light'));
@@ -650,9 +710,9 @@ export default function App() {
     }, [theme]);
 
     useEffect(() => {
-        if (isMenuOpen) document.body.style.overflow = 'hidden';
+        if (isMenuOpen || isPreloading) document.body.style.overflow = 'hidden';
         else document.body.style.overflow = 'auto';
-    }, [isMenuOpen]);
+    }, [isMenuOpen, isPreloading]);
 
     useEffect(() => {
         const moveCursor = (e) => {
@@ -680,6 +740,7 @@ export default function App() {
 
     return (
         <>
+            {isPreloading && <Preloader onComplete={() => setIsPreloading(false)} />}
             <div ref={outlineRef} className="cursor-outline"></div>
             <div className="noise"></div>
 
