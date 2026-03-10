@@ -80,12 +80,13 @@ const RevealOnScroll = ({ children }) => {
     const ref = useRef(null);
 
     useEffect(() => {
+        const currentRef = ref.current;
         const observer = new IntersectionObserver(
             ([entry]) => { if (entry.isIntersecting) { setIsVisible(true); observer.unobserve(entry.target); } },
             { threshold: 0.1 }
         );
-        if (ref.current) observer.observe(ref.current);
-        return () => { if (ref.current) observer.unobserve(ref.current); };
+        if (currentRef) observer.observe(currentRef);
+        return () => { if (currentRef) observer.unobserve(currentRef); };
     }, []);
 
     return <div ref={ref} className={`reveal ${isVisible ? "visible" : ""}`}>{children}</div>;
@@ -136,7 +137,7 @@ const MazeGame = () => {
         }
     };
 
-    const playSynthSound = (type) => {
+    const playSynthSound = useCallback((type) => {
         if (isMuted || !audioCtxRef.current) return;
 
         const ctx = audioCtxRef.current;
@@ -188,7 +189,7 @@ const MazeGame = () => {
             playNote(783.99, now + 0.2, 0.1); // G5
             playNote(1046.50, now + 0.3, 0.4);// C6
         }
-    };
+    }, [isMuted]);
 
     const generateMaze = useCallback(() => {
         const { cols, rows } = gameState.current;
@@ -259,8 +260,9 @@ const MazeGame = () => {
     };
 
     useEffect(() => {
+        const currentGameState = gameState.current;
         if (status !== "playing" && status !== "won") {
-            if (gameState.current.animationId) cancelAnimationFrame(gameState.current.animationId);
+            if (currentGameState.animationId) cancelAnimationFrame(currentGameState.animationId);
             return;
         }
         const canvas = canvasRef.current;
@@ -274,7 +276,12 @@ const MazeGame = () => {
 
         const render = () => {
             const now = Date.now();
-            if (status === 'playing') setStats(prev => ({ ...prev, time: Math.floor((now - gameState.current.startTime) / 1000) }));
+            if (status === 'playing') {
+                setStats(prev => {
+                    const newTime = Math.floor((now - gameState.current.startTime) / 1000);
+                    return prev.time === newTime ? prev : { ...prev, time: newTime };
+                });
+            }
             const speed = 0.2;
             gameState.current.visual.x += (gameState.current.player.x - gameState.current.visual.x) * speed;
             gameState.current.visual.y += (gameState.current.player.y - gameState.current.visual.y) * speed;
@@ -336,7 +343,7 @@ const MazeGame = () => {
 
             // Particles
             if (status === "won") {
-                gameState.current.particles.forEach((p, i) => {
+                gameState.current.particles.forEach((p) => {
                     p.x += p.vx;
                     p.y += p.vy;
                     p.life -= 0.02;
@@ -349,7 +356,7 @@ const MazeGame = () => {
             gameState.current.animationId = requestAnimationFrame(render);
         };
         render();
-        return () => cancelAnimationFrame(gameState.current.animationId);
+        return () => cancelAnimationFrame(currentGameState.animationId);
     }, [status]);
 
     useEffect(() => {
@@ -408,7 +415,7 @@ const MazeGame = () => {
         window.addEventListener("keydown", handleKey);
         gameState.current.move = move;
         return () => window.removeEventListener("keydown", handleKey);
-    }, [status, isMuted]);
+    }, [status, isMuted, playSynthSound]);
 
     return (
         <section className="maze-section border-b pad-x pad-y" ref={containerRef}>
@@ -614,7 +621,7 @@ const MenuPopup = ({ isOpen, onClose }) => {
                         onClick={onClose}
                         style={{ transitionDelay: `${links.length * 0.1}s` }}
                     >
-                        <span className="menu-link-text">INITIATE PROJECT -></span>
+                        <span className="menu-link-text">INITIATE PROJECT -&gt;</span>
                     </a>
                 </div>
 
@@ -633,7 +640,6 @@ const MenuPopup = ({ isOpen, onClose }) => {
 export default function App() {
     const [theme, setTheme] = useState('light');
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const dotRef = useRef(null);
     const outlineRef = useRef(null);
 
     const toggleTheme = () => setTheme((prev) => (prev === 'light' ? 'dark' : 'light'));
@@ -649,56 +655,21 @@ export default function App() {
     }, [isMenuOpen]);
 
     useEffect(() => {
-        // Track the actual mouse position
-        let mouseX = window.innerWidth / 2;
-        let mouseY = window.innerHeight / 2;
-
-        // Track the interpolated positions for dot and outline
-        let outlineX = window.innerWidth / 2;
-        let outlineY = window.innerHeight / 2;
-        let dotX = window.innerWidth / 2;
-        let dotY = window.innerHeight / 2;
-
-        // Animation frame reference
-        let animationFrameId;
-
         const moveCursor = (e) => {
-            mouseX = e.clientX;
-            mouseY = e.clientY;
-        };
-
-        const animate = () => {
-            // Instant tracking for the dot (with tiny interpolation for supreme smoothness)
-            dotX += (mouseX - dotX) * 0.8;
-            dotY += (mouseY - dotY) * 0.8;
-
-            // Smoother trailing interpolation for the outline
-            outlineX += (mouseX - outlineX) * 0.15;
-            outlineY += (mouseY - outlineY) * 0.15;
-
-            if (dotRef.current && outlineRef.current) {
-                dotRef.current.style.transform = `translate(${dotX}px, ${dotY}px)`;
-                outlineRef.current.style.transform = `translate(${outlineX}px, ${outlineY}px)`;
+            const { clientX, clientY } = e;
+            if (outlineRef.current) {
+                outlineRef.current.style.transform = `translate(${clientX}px, ${clientY}px)`;
             }
-
-            animationFrameId = requestAnimationFrame(animate);
         };
-
         const handleInteraction = () => document.body.classList.add("cursor-active");
         const handleReset = () => document.body.classList.remove("cursor-active");
-
         window.addEventListener("mousemove", moveCursor);
         window.addEventListener("mousedown", handleInteraction);
         window.addEventListener("mouseup", handleReset);
-
-        // Start loop
-        animate();
-
         return () => {
             window.removeEventListener("mousemove", moveCursor);
             window.removeEventListener("mousedown", handleInteraction);
             window.removeEventListener("mouseup", handleReset);
-            cancelAnimationFrame(animationFrameId);
         };
     }, []);
 
@@ -709,7 +680,6 @@ export default function App() {
 
     return (
         <>
-            <div ref={dotRef} className="cursor-dot"></div>
             <div ref={outlineRef} className="cursor-outline"></div>
             <div className="noise"></div>
 
@@ -846,7 +816,7 @@ export default function App() {
                                     <div><label className="mono input-label">02. Email</label><input type="email" name="email" className="big-input" placeholder="ENTER EMAIL ADDRESS" required /></div>
                                     <div><label className="mono input-label">03. Phone Number</label><input type="tel" name="phone" className="big-input" placeholder="ENTER PHONE (OPTIONAL)" /></div>
                                     <div><label className="mono input-label">04. Project Details</label><textarea name="message" className="big-input" placeholder="TELL US ABOUT YOUR GOALS..." rows="3" style={{ resize: 'vertical', minHeight: '100px' }} required></textarea></div>
-                                    <button type="submit" className="submit-btn mono">TRANSMIT PROPOSAL -></button>
+                                    <button type="submit" className="submit-btn mono">TRANSMIT PROPOSAL -&gt;</button>
                                 </form>
                             </div>
                         </RevealOnScroll>
