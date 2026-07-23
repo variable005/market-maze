@@ -440,13 +440,6 @@ export default function App() {
 
                         <RevealOnScroll>
                             <div className="hero-content-inner">
-                                <div className="hero-meta mono">
-                                    <span className="live-status-pill">
-                                        <span className="pulse-dot"></span> <LiveClock />
-                                    </span>
-                                    <span className="hero-tag-pill">// STRATEGIC ENGINE</span>
-                                </div>
-
                                 <h1 className="hero-title">
                                     navigate the Market<br />
                                     <span className="outline-text">Master the Maze</span>
