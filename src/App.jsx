@@ -449,14 +449,6 @@ export default function App() {
                                     <p className="hero-sub">
                                         We are the strategic partner for ambitious founders. Turning uncertainty into measurable leverage.
                                     </p>
-                                    <div className="hero-actions">
-                                        <a href="#contact" className="hero-cta-btn mono">
-                                            INITIATE PROJECT <span>→</span>
-                                        </a>
-                                        <a href="#services" className="hero-secondary-btn mono">
-                                            EXPLORE MODULES
-                                        </a>
-                                    </div>
                                     <div className="scroll-indicator" onClick={handleScrollDown} title="Scroll Down">↓</div>
                                 </div>
                             </div>
