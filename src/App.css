@@ -410,15 +410,15 @@ body.dark-mode .nav-logo-img {
 
 /* --- HERO SECTION WITH VIDEO BACKGROUND --- */
 .hero-section {
-    min-height: 85vh;
+    min-height: 90vh;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     position: relative;
     overflow: hidden;
-    padding-top: 80px;
-    padding-bottom: 80px;
+    padding-top: 20px;
+    padding-bottom: 60px;
 }
 
 .hero-video-wrapper {
