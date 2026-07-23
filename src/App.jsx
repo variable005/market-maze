@@ -4,6 +4,7 @@ import "./App.css";
 // IMPORT YOUR LOGO
 // Make sure this path is correct in your project structure
 import marketMazeLogo from "./assets/marketmaze.svg";
+import heroBgVideo from "./assets/hero_bg.mp4";
 
 // --- DATA: SERVICES CONFIGURATION ---
 const servicesData = [
@@ -321,9 +322,23 @@ export default function App() {
     const [theme, setTheme] = useState('light');
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isPreloading, setIsPreloading] = useState(true);
+    const [isVideoPlaying, setIsVideoPlaying] = useState(true);
     const outlineRef = useRef(null);
+    const videoRef = useRef(null);
 
     const toggleTheme = () => setTheme((prev) => (prev === 'light' ? 'dark' : 'light'));
+
+    const toggleVideoPlay = () => {
+        if (videoRef.current) {
+            if (isVideoPlaying) {
+                videoRef.current.pause();
+                setIsVideoPlaying(false);
+            } else {
+                videoRef.current.play();
+                setIsVideoPlaying(true);
+            }
+        }
+    };
 
     useEffect(() => {
         if (theme === 'dark') document.body.classList.add('dark-mode');
@@ -409,19 +424,60 @@ export default function App() {
 
                 <main>
                     <header className="hero-section pad-x border-b">
+                        <div className="hero-video-wrapper">
+                            <video
+                                ref={videoRef}
+                                autoPlay
+                                loop
+                                muted
+                                playsInline
+                                className="hero-video-bg"
+                            >
+                                <source src={heroBgVideo} type="video/mp4" />
+                            </video>
+                            <div className="hero-video-overlay"></div>
+                        </div>
+
                         <RevealOnScroll>
-                            <div className="hero-meta mono">
-                                <span style={{ color: 'var(--ink)', fontWeight: 'bold' }}><LiveClock /></span>
-                            </div>
-                            <h1 className="hero-title">
-                                navigate the Market<br />
-                                <span className="outline-text">Master the Maze</span>
-                            </h1>
-                            <div className="hero-footer">
-                                <p className="hero-sub">We are the strategic partner for ambitious founders. Turning uncertainty into measurable leverage.</p>
-                                <div className="scroll-indicator" onClick={handleScrollDown}>↓</div>
+                            <div className="hero-content-inner">
+                                <div className="hero-meta mono">
+                                    <span className="live-status-pill">
+                                        <span className="pulse-dot"></span> <LiveClock />
+                                    </span>
+                                    <span className="hero-tag-pill">// STRATEGIC ENGINE</span>
+                                </div>
+
+                                <h1 className="hero-title">
+                                    navigate the Market<br />
+                                    <span className="outline-text">Master the Maze</span>
+                                </h1>
+
+                                <div className="hero-footer">
+                                    <p className="hero-sub">
+                                        We are the strategic partner for ambitious founders. Turning uncertainty into measurable leverage.
+                                    </p>
+                                    <div className="hero-actions">
+                                        <a href="#contact" className="hero-cta-btn mono">
+                                            INITIATE PROJECT <span>→</span>
+                                        </a>
+                                        <a href="#services" className="hero-secondary-btn mono">
+                                            EXPLORE MODULES
+                                        </a>
+                                    </div>
+                                    <div className="scroll-indicator" onClick={handleScrollDown} title="Scroll Down">↓</div>
+                                </div>
                             </div>
                         </RevealOnScroll>
+
+                        <button
+                            onClick={toggleVideoPlay}
+                            className="video-toggle-btn mono"
+                            aria-label="Toggle Video Motion"
+                            title={isVideoPlaying ? "Pause Video Motion" : "Play Video Motion"}
+                        >
+                            <span className="video-status-dot" style={{ background: isVideoPlaying ? '#10b981' : '#f59e0b' }}></span>
+                            {isVideoPlaying ? 'MOTION: ON' : 'MOTION: PAUSED'}
+                        </button>
                     </header>
 
                     <div id="explore-target" className="marquee-container border-b">
