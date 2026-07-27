@@ -61,13 +61,13 @@ const portfolioProjects = [
         title: "MedBeyondBorder",
         subtitle: "Healthcare & Lifestyle — Organic Instagram Scaling",
         category: "Social & Organic",
-        tags: ["HEALTHCARE", "ZERO AD SPEND", "100+ FOLLOWERS"],
-        objective: "Build organic brand presence and audience engagement for @medbeyondborder from a zero-follower start.",
-        action: "Executed zero-ad-spend organic content strategy with high-retention video hooks tailored for medical & lifestyle audiences.",
-        impact: "Scaled account to 100+ active followers, 100,000+ organic views, and 1,000+ likes on a 100 follower account within 2 days of launch.",
+        tags: ["HEALTHCARE", "ZERO AD SPEND", "2X FOLLOWER GROWTH"],
+        objective: "Drive rapid organic brand awareness, engagement velocity, and audience expansion for @medbeyondborder.",
+        action: "Executed zero-ad-spend organic content strategy leveraging high-velocity engagement triggers.",
+        impact: "Scaled active follower base by 2X, captured 100,000+ organic views, and generated 1,000+ likes within 2 days.",
         badge: "MEDBEYONDBORDER",
-        statLabel: "ORGANIC FOLLOWERS",
-        statValue: "100+"
+        statLabel: "FOLLOWER GROWTH",
+        statValue: "2X"
     }
 ];
 
@@ -99,12 +99,12 @@ const campaignAnalytics = [
         id: "analytics-03",
         title: "MedBeyondBorder — Organic Healthcare Instagram Growth",
         period: "TBILISI, GEORGIA // HEALTHCARE & LIFESTYLE",
-        tags: ["MEDBEYONDBORDER", "ZERO AD SPEND", "100+ FOLLOWERS", "VIRAL BREAKOUT"],
-        objectiveText: "Drive rapid organic brand awareness, audience acquisition, and follower growth for the MedBeyondBorder Instagram handle from scratch.",
+        tags: ["MEDBEYONDBORDER", "ZERO AD SPEND", "2X FOLLOWER GROWTH", "VIRAL BREAKOUT"],
+        objectiveText: "Drive rapid organic brand awareness, engagement velocity, and audience expansion for @medbeyondborder.",
         actionText: "Executed zero-ad-spend organic content strategy leveraging high-velocity engagement triggers and specialized healthcare audience positioning.",
-        impactText: "Achieved 100,000+ organic views within 2 days of launch, scaled from 0 to 100+ active followers, and secured 1,000+ likes on a 100 follower account.",
-        highlightStat: "100+",
-        highlightLabel: "ORGANIC FOLLOWERS (0 TO 100+)"
+        impactText: "Achieved 100,000+ organic views within 2 days of launch, driving 2X follower growth and securing 1,000+ organic engagements.",
+        highlightStat: "2X",
+        highlightLabel: "FOLLOWER GROWTH (DOUBLED AUDIENCE)"
     }
 ];
 
@@ -154,8 +154,8 @@ export default function Portfolio({ onBackToHome, onOpenContact }) {
                         <span className="stat-desc mono">30-DAY AD VIEWS</span>
                     </div>
                     <div className="stat-card">
-                        <span className="stat-val mono">100+</span>
-                        <span className="stat-desc mono">MEDBEYONDBORDER FOLLOWERS</span>
+                        <span className="stat-val mono">2X</span>
+                        <span className="stat-desc mono">FOLLOWER GROWTH (48 HRS)</span>
                     </div>
                     <div className="stat-card">
                         <span className="stat-val mono">600+</span>
