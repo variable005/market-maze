@@ -7,13 +7,13 @@ const portfolioProjects = [
         title: "Pyxer.ai",
         subtitle: "US Brand, Stanford University — Feature Engineering",
         category: "Product & Research",
-        tags: ["US MARKET", "SURVEYS", "ROADMAP"],
-        objective: "Identify core product features that resonate with the US market.",
-        action: "Conducted 600+ structured customer surveys.",
-        impact: "Insights led to a sharper feature roadmap and stronger product-market fit for the brand's launch.",
+        tags: ["US MARKET", "4 COUNTRIES", "GLOBAL SURVEYS", "ROADMAP"],
+        objective: "Identify core product features that resonate across target international markets.",
+        action: "Conducted 600+ structured customer surveys across 4 countries.",
+        impact: "Cross-border insights across 4 countries led to a sharper feature roadmap and stronger product-market fit for the brand's launch.",
         badge: "pyxer",
         isDarkBadge: true,
-        statLabel: "SURVEYS CONDUCTED",
+        statLabel: "SURVEYS (4 COUNTRIES)",
         statValue: "600+"
     },
     {
@@ -159,7 +159,7 @@ export default function Portfolio({ onBackToHome, onOpenContact }) {
                     </div>
                     <div className="stat-card">
                         <span className="stat-val mono">600+</span>
-                        <span className="stat-desc mono">STANFORD/PYXER SURVEYS</span>
+                        <span className="stat-desc mono">STANFORD/PYXER (4 COUNTRIES)</span>
                     </div>
                 </div>
             </header>
