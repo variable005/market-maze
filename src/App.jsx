@@ -4,6 +4,7 @@ import "./App.css";
 // IMPORT YOUR LOGO
 // Make sure this path is correct in your project structure
 import marketMazeLogo from "./assets/marketmaze.svg";
+import Portfolio from "./components/Portfolio";
 
 // --- DATA: SERVICES CONFIGURATION ---
 const servicesData = [
@@ -205,11 +206,12 @@ const FAQSection = () => {
 };
 
 // --- COMPONENT: LIQUID POPUP MENU ---
-const MenuPopup = ({ isOpen, onClose }) => {
+const MenuPopup = ({ isOpen, onClose, onSelectView }) => {
     const links = [
-        { name: "Services", href: "#services", id: "01" },
-        { name: "Leadership", href: "#team", id: "02" },
-        { name: "FAQ", href: "#faq", id: "03" },
+        { name: "Services", href: "#services", id: "01", view: "home" },
+        { name: "Portfolio", href: "#portfolio", id: "02", view: "portfolio" },
+        { name: "Leadership", href: "#team", id: "03", view: "home" },
+        { name: "FAQ", href: "#faq", id: "04", view: "home" },
     ];
 
     return (
@@ -227,7 +229,10 @@ const MenuPopup = ({ isOpen, onClose }) => {
                             href={link.href}
                             key={link.id}
                             className="menu-link-item"
-                            onClick={onClose}
+                            onClick={() => {
+                                onClose();
+                                if (onSelectView) onSelectView(link.view);
+                            }}
                             style={{ transitionDelay: `${index * 0.1}s` }}
                         >
                             <span className="menu-link-text">{link.name}</span>
@@ -239,7 +244,10 @@ const MenuPopup = ({ isOpen, onClose }) => {
                     <a
                         href="#contact"
                         className="menu-link-item highlight"
-                        onClick={onClose}
+                        onClick={() => {
+                            onClose();
+                            if (onSelectView) onSelectView("home");
+                        }}
                         style={{ transitionDelay: `${links.length * 0.1}s` }}
                     >
                         <span className="menu-link-text">INITIATE PROJECT -&gt;</span>
@@ -321,6 +329,9 @@ export default function App() {
     const [theme, setTheme] = useState('light');
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isPreloading, setIsPreloading] = useState(true);
+    const [currentView, setCurrentView] = useState(() => {
+        return window.location.hash === '#portfolio' ? 'portfolio' : 'home';
+    });
     const outlineRef = useRef(null);
 
     const toggleTheme = () => setTheme((prev) => (prev === 'light' ? 'dark' : 'light'));
@@ -334,6 +345,19 @@ export default function App() {
         if (isMenuOpen || isPreloading) document.body.style.overflow = 'hidden';
         else document.body.style.overflow = 'auto';
     }, [isMenuOpen, isPreloading]);
+
+    useEffect(() => {
+        const handleHashChange = () => {
+            if (window.location.hash === '#portfolio') {
+                setCurrentView('portfolio');
+                window.scrollTo(0, 0);
+            } else if (['#services', '#team', '#faq', '#contact', ''].includes(window.location.hash)) {
+                setCurrentView('home');
+            }
+        };
+        window.addEventListener('hashchange', handleHashChange);
+        return () => window.removeEventListener('hashchange', handleHashChange);
+    }, []);
 
     useEffect(() => {
         const moveCursor = (e) => {
@@ -365,7 +389,14 @@ export default function App() {
             <div ref={outlineRef} className="cursor-outline"></div>
             <div className="noise"></div>
 
-            <MenuPopup isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
+            <MenuPopup
+                isOpen={isMenuOpen}
+                onClose={() => setIsMenuOpen(false)}
+                onSelectView={(view) => {
+                    setCurrentView(view);
+                    if (view === 'portfolio') window.scrollTo(0, 0);
+                }}
+            />
 
             {/* --- MOBILE DOCK --- */}
             <div className="mobile-dock mobile-only">
@@ -377,14 +408,28 @@ export default function App() {
                     {isMenuOpen ? '×' : '+'}
                 </button>
                 <div className="dock-divider"></div>
-                <a href="#contact" className="dock-cta mono">
+                <a
+                    href="#contact"
+                    className="dock-cta mono"
+                    onClick={() => {
+                        if (currentView !== 'home') setCurrentView('home');
+                    }}
+                >
                     <span className="status-dot"></span> Contact
                 </a>
             </div>
 
             <div className="container">
                 <nav className="nav-bar">
-                    <div className="logo" onClick={() => window.scrollTo(0, 0)} style={{ cursor: 'pointer' }}>
+                    <div
+                        className="logo"
+                        onClick={() => {
+                            setCurrentView('home');
+                            window.location.hash = '';
+                            window.scrollTo(0, 0);
+                        }}
+                        style={{ cursor: 'pointer' }}
+                    >
                         <img src={marketMazeLogo} alt="MarketMaze" className="nav-logo-img" />
                         MarketMaze
                     </div>
@@ -392,9 +437,37 @@ export default function App() {
 
                         {/* --- DESKTOP NAVIGATION LINKS --- */}
                         <div className="desktop-only" style={{ display: 'flex', gap: '30px', marginRight: '20px' }}>
-                            <a href="#services" className="nav-link mono">Services</a>
-                            <a href="#team" className="nav-link mono">Leadership</a>
-                            <a href="#faq" className="nav-link mono">FAQ</a>
+                            <a
+                                href="#services"
+                                className="nav-link mono"
+                                onClick={() => setCurrentView('home')}
+                            >
+                                Services
+                            </a>
+                            <a
+                                href="#portfolio"
+                                className={`nav-link mono ${currentView === 'portfolio' ? 'active' : ''}`}
+                                onClick={() => {
+                                    setCurrentView('portfolio');
+                                    window.scrollTo(0, 0);
+                                }}
+                            >
+                                Portfolio
+                            </a>
+                            <a
+                                href="#team"
+                                className="nav-link mono"
+                                onClick={() => setCurrentView('home')}
+                            >
+                                Leadership
+                            </a>
+                            <a
+                                href="#faq"
+                                className="nav-link mono"
+                                onClick={() => setCurrentView('home')}
+                            >
+                                FAQ
+                            </a>
                         </div>
 
                         <button onClick={toggleTheme} className="theme-toggle" aria-label="Toggle Theme">
@@ -408,104 +481,140 @@ export default function App() {
                 </nav>
 
                 <main>
-                    <header className="hero-section pad-x border-b">
-                        <RevealOnScroll>
-                            <div className="hero-meta mono">
-                                <span style={{ color: 'var(--ink)', fontWeight: 'bold' }}><LiveClock /></span>
-                            </div>
-                            <h1 className="hero-title">
-                                navigate the Market<br />
-                                <span className="outline-text">Master the Maze</span>
-                            </h1>
-                            <div className="hero-footer">
-                                <p className="hero-sub">We are the strategic partner for ambitious founders. Turning uncertainty into measurable leverage.</p>
-                                <div className="scroll-indicator" onClick={handleScrollDown}>↓</div>
-                            </div>
-                        </RevealOnScroll>
-                    </header>
+                    {currentView === 'portfolio' ? (
+                        <Portfolio
+                            onBackToHome={() => {
+                                setCurrentView('home');
+                                window.location.hash = '';
+                                window.scrollTo(0, 0);
+                            }}
+                            onOpenContact={() => {
+                                setCurrentView('home');
+                                window.location.hash = '#contact';
+                                setTimeout(() => {
+                                    const contactEl = document.getElementById('contact');
+                                    if (contactEl) contactEl.scrollIntoView({ behavior: 'smooth' });
+                                }, 100);
+                            }}
+                        />
+                    ) : (
+                        <>
+                            <header className="hero-section pad-x border-b">
+                                <RevealOnScroll>
+                                    <div className="hero-meta mono">
+                                        <span style={{ color: 'var(--ink)', fontWeight: 'bold' }}><LiveClock /></span>
+                                    </div>
+                                    <h1 className="hero-title">
+                                        navigate the Market<br />
+                                        <span className="outline-text">Master the Maze</span>
+                                    </h1>
+                                    <div className="hero-footer">
+                                        <p className="hero-sub">We are the strategic partner for ambitious founders. Turning uncertainty into measurable leverage.</p>
+                                        <div className="scroll-indicator" onClick={handleScrollDown}>↓</div>
+                                    </div>
+                                </RevealOnScroll>
+                            </header>
 
-                    <div id="explore-target" className="marquee-container border-b">
-                        <div className="marquee-content mono">
-                            // STRATEGIC CONSULTING // DIGITAL TRANSFORMATION // BRAND AUTHORITY // MARKET EXPANSION // REVENUE OPTIMIZATION //
-                        </div>
-                    </div>
-
-                    <section className="border-b">
-                        <RevealOnScroll>
-                            <div className="pad-x pad-y-sm border-b header-flex">
-                                <h2>The Advantage</h2>
-                                <span className="mono">WHY MarketMaze</span>
-                            </div>
-                        </RevealOnScroll>
-                        <div className="benefits-grid">
-                            <BenefitBox icon="01" title="Strategic Depth" text="We don't just execute tasks; we align every action with your long-term business objectives." />
-                            <BenefitBox icon="02" title="Speed of Execution" text="In the modern economy, speed is currency. We deploy solutions faster than traditional agencies." />
-                            <BenefitBox icon="03" title="Data-First Approach" text="Creativity without data is just art. We use analytics to validate every decision." />
-                            <BenefitBox icon="04" title="Global Standards" text="Based in Hyderabad, building for the world. Our code quality meets international benchmarks." />
-                        </div>
-                    </section>
-
-                    <ServicesDeck />
-
-                    <section id="team" className="border-b">
-                        <RevealOnScroll>
-                            <div className="pad-x pad-y border-b"><h2>Leadership</h2></div>
-                        </RevealOnScroll>
-                        <div className="founders-grid">
-                            {leadershipData.map((leader, index) => (
-                                <div className="founder-col" key={index}>
-                                    <span className="founder-role mono">{leader.role}</span>
-                                    <h3 className="founder-name">{leader.name}</h3>
-                                    <a
-                                        href={leader.linkedin}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="connect-btn"
-                                    >
-                                        CONNECT <span>↗</span>
-                                    </a>
+                            <div id="explore-target" className="marquee-container border-b">
+                                <div className="marquee-content mono">
+                                    // STRATEGIC CONSULTING // DIGITAL TRANSFORMATION // BRAND AUTHORITY // MARKET EXPANSION // REVENUE OPTIMIZATION //
                                 </div>
-                            ))}
-                        </div>
-                    </section>
-
-                    <FAQSection />
-
-                    <section id="contact" className="pad-x pad-y">
-                        <RevealOnScroll>
-                            <div className="contact-layout">
-                                <div>
-                                    <h2 style={{ lineHeight: '0.9' }}>Start<br />The<br />Work.</h2>
-                                    <p className="mono contact-details">HYDERABAD HQ<br />+91 91771 06693<br />BUSINESS@MARKETMAZE.IN</p>
-                                </div>
-                                <form
-                                    className="contact-form"
-                                    onSubmit={(e) => {
-                                        e.preventDefault();
-                                        const name = e.target.name.value;
-                                        const email = e.target.email.value;
-                                        const phone = e.target.phone.value;
-                                        const message = e.target.message.value;
-                                        const subject = `New Project Inquiry: ${name}`;
-                                        const body = `Name: ${name}%0D%0AEmail: ${email}%0D%0APhone: ${phone}%0D%0A%0D%0AProject Details:%0D%0A${message}`;
-                                        window.location.href = `mailto:business@marketmaze.in?subject=${subject}&body=${body}`;
-                                    }}
-                                >
-                                    <div><label className="mono input-label">01. Name</label><input type="text" name="name" className="big-input" placeholder="ENTER FULL NAME" required /></div>
-                                    <div><label className="mono input-label">02. Email</label><input type="email" name="email" className="big-input" placeholder="ENTER EMAIL ADDRESS" required /></div>
-                                    <div><label className="mono input-label">03. Phone Number</label><input type="tel" name="phone" className="big-input" placeholder="ENTER PHONE (OPTIONAL)" /></div>
-                                    <div><label className="mono input-label">04. Project Details</label><textarea name="message" className="big-input" placeholder="TELL US ABOUT YOUR GOALS..." rows="3" style={{ resize: 'vertical', minHeight: '100px' }} required></textarea></div>
-                                    <button type="submit" className="submit-btn mono">TRANSMIT PROPOSAL -&gt;</button>
-                                </form>
                             </div>
-                        </RevealOnScroll>
-                    </section>
+
+                            <section className="border-b">
+                                <RevealOnScroll>
+                                    <div className="pad-x pad-y-sm border-b header-flex">
+                                        <h2>The Advantage</h2>
+                                        <span className="mono">WHY MarketMaze</span>
+                                    </div>
+                                </RevealOnScroll>
+                                <div className="benefits-grid">
+                                    <BenefitBox icon="01" title="Strategic Depth" text="We don't just execute tasks; we align every action with your long-term business objectives." />
+                                    <BenefitBox icon="02" title="Speed of Execution" text="In the modern economy, speed is currency. We deploy solutions faster than traditional agencies." />
+                                    <BenefitBox icon="03" title="Data-First Approach" text="Creativity without data is just art. We use analytics to validate every decision." />
+                                    <BenefitBox icon="04" title="Global Standards" text="Based in Hyderabad, building for the world. Our code quality meets international benchmarks." />
+                                </div>
+                            </section>
+
+                            <ServicesDeck />
+
+                            <section id="team" className="border-b">
+                                <RevealOnScroll>
+                                    <div className="pad-x pad-y border-b"><h2>Leadership</h2></div>
+                                </RevealOnScroll>
+                                <div className="founders-grid">
+                                    {leadershipData.map((leader, index) => (
+                                        <div className="founder-col" key={index}>
+                                            <span className="founder-role mono">{leader.role}</span>
+                                            <h3 className="founder-name">{leader.name}</h3>
+                                            <a
+                                                href={leader.linkedin}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="connect-btn"
+                                            >
+                                                CONNECT <span>↗</span>
+                                            </a>
+                                        </div>
+                                    ))}
+                                </div>
+                            </section>
+
+                            <FAQSection />
+
+                            <section id="contact" className="pad-x pad-y">
+                                <RevealOnScroll>
+                                    <div className="contact-layout">
+                                        <div>
+                                            <h2 style={{ lineHeight: '0.9' }}>Start<br />The<br />Work.</h2>
+                                            <p className="mono contact-details">HYDERABAD HQ<br />+91 91771 06693<br />BUSINESS@MARKETMAZE.IN</p>
+                                        </div>
+                                        <form
+                                            className="contact-form"
+                                            onSubmit={(e) => {
+                                                e.preventDefault();
+                                                const name = e.target.name.value;
+                                                const email = e.target.email.value;
+                                                const phone = e.target.phone.value;
+                                                const message = e.target.message.value;
+                                                const subject = `New Project Inquiry: ${name}`;
+                                                const body = `Name: ${name}%0D%0AEmail: ${email}%0D%0APhone: ${phone}%0D%0A%0D%0AProject Details:%0D%0A${message}`;
+                                                window.location.href = `mailto:business@marketmaze.in?subject=${subject}&body=${body}`;
+                                            }}
+                                        >
+                                            <div><label className="mono input-label">01. Name</label><input type="text" name="name" className="big-input" placeholder="ENTER FULL NAME" required /></div>
+                                            <div><label className="mono input-label">02. Email</label><input type="email" name="email" className="big-input" placeholder="ENTER EMAIL ADDRESS" required /></div>
+                                            <div><label className="mono input-label">03. Phone Number</label><input type="tel" name="phone" className="big-input" placeholder="ENTER PHONE (OPTIONAL)" /></div>
+                                            <div><label className="mono input-label">04. Project Details</label><textarea name="message" className="big-input" placeholder="TELL US ABOUT YOUR GOALS..." rows="3" style={{ resize: 'vertical', minHeight: '100px' }} required></textarea></div>
+                                            <button type="submit" className="submit-btn mono">TRANSMIT PROPOSAL -&gt;</button>
+                                        </form>
+                                    </div>
+                                </RevealOnScroll>
+                            </section>
+                        </>
+                    )}
                 </main>
 
                 <footer className="border-t pad-x footer-flex" style={{ marginBottom: '80px' }}>
                     <div className="footer-col">
                         <span className="mono" style={{ fontWeight: '700' }}>MARKETMAZE LLP</span>
                         <p className="mono" style={{ marginTop: '10px', fontSize: '0.7rem', opacity: '0.6' }}>Registered in India.<br />All Rights Reserved.</p>
+                    </div>
+                    <div className="footer-col">
+                        <span className="mono">Navigation</span>
+                        <div style={{ marginTop: '10px', display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                            <a
+                                href="#portfolio"
+                                className="mono footer-link"
+                                onClick={() => {
+                                    setCurrentView('portfolio');
+                                    window.scrollTo(0, 0);
+                                }}
+                            >
+                                Portfolio Highlights
+                            </a>
+                            <a href="#services" onClick={() => setCurrentView('home')} className="mono footer-link">Services Deck</a>
+                        </div>
                     </div>
                     <div className="footer-col">
                         <span className="mono">Socials</span>
