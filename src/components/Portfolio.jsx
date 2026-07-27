@@ -311,7 +311,7 @@ export default function Portfolio({ onBackToHome, onOpenContact }) {
             {/* PORTFOLIO BOTTOM CTA */}
             <section className="border-b">
                 <div className="cta-box">
-                    <span className="mono status-blink">● READY TO SCALE YOUR BRAND?</span>
+                    <span className="mono">● READY TO SCALE YOUR BRAND?</span>
                     <h2>Turn Uncertainty Into<br />Measurable Leverage</h2>
                     <p>
                         Whether you need high-ticket B2B pipelines, supply chain optimization, or viral growth campaigns, MarketMaze delivers empirical results.

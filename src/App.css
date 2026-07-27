@@ -609,7 +609,6 @@ body.dark-mode .nav-logo-img {
 
 .status-blink {
     color: var(--ink);
-    animation: pulse-mono 2s infinite;
 }
 
 .display-big-title {
