@@ -45,13 +45,13 @@ const portfolioProjects = [
     },
     {
         id: "proj-05",
-        title: "Across Brand Handle",
-        subtitle: "High-ROI Social & Media Campaign",
+        title: "Multi-Brand Social Growth",
+        subtitle: "High-ROI Organic & Content Strategy",
         category: "Social & Organic",
         tags: ["VIRAL REACH", "PROFILE VISITS", "HIGH ROI"],
-        objective: "Drive high engagement and brand awareness with a lean media footprint.",
-        action: "Executed high-retention content strategy, resulting in 105K+ video views and 500+ high-intent profile visits.",
-        impact: "Achieved 2X follower growth and high ROI on media execution with measurable brand lift.",
+        objective: "Drive viral brand awareness and engagement velocity across brand channels.",
+        action: "Executed high-retention short-form video campaigns, capturing 105,000+ views and 500+ high-intent profile visits.",
+        impact: "Delivered 2X follower growth and high brand equity lift with maximum content efficiency.",
         badge: "INSTAGRAM",
         statLabel: "ORGANIC VIDEO VIEWS",
         statValue: "105K+"
